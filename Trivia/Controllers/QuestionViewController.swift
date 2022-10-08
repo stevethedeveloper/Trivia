@@ -9,30 +9,88 @@ import UIKit
 
 class QuestionViewController: UIViewController {
 
-    var question: Question? {
-        didSet {
-            loadQuestion()
-        }
+    @IBOutlet weak var questionLabel: UILabel!
+//    @IBOutlet weak var answerView: UIView!
+    
+    var questions: [Question]!
+    var currentQuestion: Question!
+    var questionButtons = [UIButton]()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        nextQuestion()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
     func loadQuestion() {
-        print(question)
+        clearAnswers()
+        questionLabel.text = String(htmlEncodedString: currentQuestion.question)
+        
+        let height = 40
+        var answers: [String] = currentQuestion.incorrect_answers
+        answers.append(currentQuestion.correct_answer)
+        answers.shuffle()
+        var row = 0
+        
+        for answer in answers {
+            let answerButton = UIButton(type: .system)
+            answerButton.translatesAutoresizingMaskIntoConstraints = false
+            answerButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+            answerButton.setTitle(String(htmlEncodedString: answer), for: .normal)
+            answerButton.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
+            answerButton.layer.borderWidth = 1
+            answerButton.layer.borderColor = UIColor.black.cgColor
+
+            view.addSubview(answerButton)
+            questionButtons.append(answerButton)
+            
+            NSLayoutConstraint.activate([
+                answerButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+                answerButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+                answerButton.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: CGFloat(height * row + 10)),
+            ])
+            
+            row += 1
+        }
+    }
+    
+    @objc func answerTapped(_ sender: UIButton) {
+        guard let selectedAnswer = sender.titleLabel?.text else { return }
+        var result: String!
+        var correctAnswer: String!
+        if selectedAnswer == String(htmlEncodedString: currentQuestion.correct_answer) {
+            result = "Correct!"
+            correctAnswer = ""
+        } else {
+            result = "Incorrect!"
+            correctAnswer = "Correct answer: \(String(htmlEncodedString: currentQuestion.correct_answer) ?? "")"
+        }
+
+        let ac = UIAlertController(title: result, message: correctAnswer, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: continueRound))
+        present(ac, animated: true)
+
+//        nextQuestion()
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func continueRound(action: UIAlertAction) {
+        nextQuestion()
     }
-    */
-
+    
+    func nextQuestion() {
+        guard questions.count > 0 else {
+            navigationController?.popViewController(animated: true)
+            return
+        }
+        currentQuestion = questions.popLast()
+        loadQuestion()
+    }
+    
+    func clearAnswers() {
+        for button in questionButtons {
+            button.removeFromSuperview()
+        }
+    }
 }

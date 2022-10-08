@@ -45,14 +45,33 @@
                     <view key="view" contentMode="scaleToFill" id="GL1-cR-48R">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Question" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4rb-hX-dOp">
+                                <rect key="frame" x="20" y="54" width="374" height="105"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="105" id="zgl-U1-O3L"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="nJV-yE-Eex"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="nJV-yE-Eex" firstAttribute="trailing" secondItem="4rb-hX-dOp" secondAttribute="trailing" constant="20" id="Zzi-tN-uKg"/>
+                            <constraint firstItem="4rb-hX-dOp" firstAttribute="top" secondItem="nJV-yE-Eex" secondAttribute="top" constant="10" id="d9R-bJ-c7K"/>
+                            <constraint firstItem="4rb-hX-dOp" firstAttribute="leading" secondItem="nJV-yE-Eex" secondAttribute="leading" constant="20" id="lZy-xh-Bpk"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="70B-uc-UBL"/>
+                    <connections>
+                        <outlet property="questionLabel" destination="4rb-hX-dOp" id="IaP-3O-7Am"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m6L-6T-BQX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1884" y="116"/>
+            <point key="canvasLocation" x="1882.608695652174" y="115.84821428571428"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="L1D-m5-mKw">

@@ -20,21 +20,13 @@ class ViewController: UIViewController {
 
         if let jsonQuestions = try? decoder.decode(Questions.self, from: json) {
             questions = jsonQuestions.results
-            
-//            DispatchQueue.main.async { [weak self] in
-//                self?.tableView.reloadData()
-//            }
         }
     }
     
-    func loadQuestion() {
-//        for question in questions {
-//            print(question)
-//        }
-        
+    func loadRound() {
         DispatchQueue.main.async { [weak self] in
             if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
-                vc.question = self?.questions.first
+                vc.questions = self?.questions
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
         }
@@ -57,7 +49,7 @@ class ViewController: UIViewController {
             if let url = URL(string: urlString) {
                 if let data = try? Data(contentsOf: url) {
                     self?.parse(json: data)
-                    self?.loadQuestion()
+                    self?.loadRound()
                     return
                 }
             }
