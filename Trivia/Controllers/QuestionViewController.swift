@@ -14,6 +14,7 @@ class QuestionViewController: UIViewController {
     
     var questions: [Question]!
     var currentQuestion: Question!
+    var currentQuestionNumber: Int = 0
     var questionButtons = [UIButton]()
     
     override func viewWillAppear(_ animated: Bool) {
@@ -85,6 +86,8 @@ class QuestionViewController: UIViewController {
             return
         }
         currentQuestion = questions.popLast()
+        currentQuestionNumber += 1
+        title = "Question \(currentQuestionNumber) of \(questions.count)"
         loadQuestion()
     }
     
