@@ -9,10 +9,16 @@ import UIKit
 
 class ViewController: UIViewController {
     var questions = [Question]()
+    var gameModelController: GameModelController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+//        let defaults = UserDefaults.standard
+//        defaults.removeObject(forKey: "score")
+//        let score = defaults.object(forKey: "score") as? Int ?? 0
+//        print(score)        
+//        defaults.set(55, forKey: "score")
+        print(gameModelController.game.score)
     }
     
     func parse(json: Data) {
