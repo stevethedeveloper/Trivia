@@ -8,5 +8,6 @@
 import Foundation
 
 struct Game {
-    let score: Int
+    var score: Int
+    var token: String
 }

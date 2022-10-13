@@ -19,12 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let _ = (scene as? UIWindowScene) else { return }
         
         if let mainViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(identifier: "MainViewController") as? ViewController {
-//            self.window?.rootViewController = mainViewController
             let gameController = GameModelController()
-            let defaults = UserDefaults.standard
-            let score = defaults.integer(forKey: "score")
-            let newGame = Game(score: score)
-            gameController.game = newGame
             mainViewController.gameModelController = gameController
         }
     }
