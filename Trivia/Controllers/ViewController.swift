@@ -18,7 +18,7 @@ class ViewController: UIViewController {
 //        let score = defaults.object(forKey: "score") as? Int ?? 0
 //        print(score)        
 //        defaults.set(55, forKey: "score")
-        print(gameModelController.game.score)
+//        print(gameModelController.game.score)
     }
     
     func parse(json: Data) {
