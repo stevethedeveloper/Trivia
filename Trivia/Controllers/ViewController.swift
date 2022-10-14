@@ -11,6 +11,10 @@ class ViewController: UIViewController {
     var questions = [Question]()
     var gameModelController: GameModelController!
     
+    override func viewWillAppear(_ animated: Bool) {
+        print("\(gameModelController.game.token)")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }

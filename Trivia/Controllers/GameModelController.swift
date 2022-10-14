@@ -14,7 +14,7 @@ class GameModelController {
     )
     
     init() {
-        // get new token
+        // get new token        
         let urlString: String
         urlString = "https://opentdb.com/api_token.php?command=request"
         
