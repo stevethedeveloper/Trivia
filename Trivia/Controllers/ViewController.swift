@@ -8,11 +8,13 @@
 import UIKit
 
 class ViewController: UIViewController {
+    @IBOutlet weak var scoreLabel: UILabel!
+    
     var questions = [Question]()
     var gameModelController: GameModelController!
     
     override func viewWillAppear(_ animated: Bool) {
-        print("\(gameModelController.game.token)")
+        scoreLabel.text = "Score: \(gameModelController.game.score)"
     }
     
     override func viewDidLoad() {
@@ -31,6 +33,7 @@ class ViewController: UIViewController {
         DispatchQueue.main.async { [weak self] in
             if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
                 vc.questions = self?.questions
+                vc.gameModelController = self?.gameModelController
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
         }
@@ -47,7 +50,7 @@ class ViewController: UIViewController {
     @IBAction func startTapped(_ sender: UIButton) {
         let urlString: String
         
-        urlString = "https://opentdb.com/api.php?amount=10"
+        urlString = "https://opentdb.com/api.php?amount=10&token=\(gameModelController.game.token)"
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             if let url = URL(string: urlString) {

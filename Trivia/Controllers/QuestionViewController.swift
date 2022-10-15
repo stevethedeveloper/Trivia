@@ -10,14 +10,23 @@ import UIKit
 class QuestionViewController: UIViewController {
 
     @IBOutlet weak var questionLabel: UILabel!
-//    @IBOutlet weak var answerView: UIView!
+    @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var difficultyLabel: UILabel!
     
+    var gameModelController: GameModelController!
     var questions: [Question]!
     var currentQuestion: Question!
     var currentQuestionNumber: Int = 0
     var questionButtons = [UIButton]()
+    var score: Int = 0 {
+        didSet {
+            gameModelController.game.score = score
+            scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
+        score = gameModelController.game.score
         nextQuestion()
     }
     
@@ -28,7 +37,8 @@ class QuestionViewController: UIViewController {
     func loadQuestion() {
         clearAnswers()
         questionLabel.text = String(htmlEncodedString: currentQuestion.question)
-        
+        difficultyLabel.text = "Difficulty: \(currentQuestion.difficulty.capitalized)"
+
         let height = 40
         var answers: [String] = currentQuestion.incorrect_answers
         answers.append(currentQuestion.correct_answer)
@@ -55,13 +65,16 @@ class QuestionViewController: UIViewController {
             
             row += 1
         }
+        
     }
     
     @objc func answerTapped(_ sender: UIButton) {
         guard let selectedAnswer = sender.titleLabel?.text else { return }
         var result: String!
         var correctAnswer: String!
+        
         if selectedAnswer == String(htmlEncodedString: currentQuestion.correct_answer) {
+            score += DifficultyPoints(rawValue: currentQuestion.difficulty)?.pointsValue ?? 0
             result = "Correct!"
             correctAnswer = ""
         } else {
@@ -87,7 +100,6 @@ class QuestionViewController: UIViewController {
         }
         currentQuestion = questions.popLast()
         currentQuestionNumber += 1
-        title = "Question \(currentQuestionNumber) of \(questions.count)"
         loadQuestion()
     }
     
