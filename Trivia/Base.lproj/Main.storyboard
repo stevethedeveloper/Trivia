@@ -28,20 +28,37 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SUa-Bz-X54">
                                 <rect key="frame" x="20" y="127" width="374" height="696"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Zrh-3b-RdB">
-                                    <size key="itemSize" width="128" height="128"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Zrh-3b-RdB">
+                                    <size key="itemSize" width="140" height="180"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="vgx-md-vMR">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Category" id="vgx-md-vMR" customClass="CategoryCell" customModule="Trivia" customModuleProvider="target">
+                                        <rect key="frame" x="10" y="10" width="140" height="180"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="aOd-1r-MH8">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="140" height="180"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8aV-HY-OFY">
+                                                    <rect key="frame" x="49.5" y="54" width="41.5" height="72"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="8aV-HY-OFY" firstAttribute="top" secondItem="aOd-1r-MH8" secondAttribute="top" constant="54" id="7Xa-vD-YPM"/>
+                                                <constraint firstItem="8aV-HY-OFY" firstAttribute="centerX" secondItem="aOd-1r-MH8" secondAttribute="centerX" id="W0w-ft-Sqa"/>
+                                                <constraint firstItem="8aV-HY-OFY" firstAttribute="centerY" secondItem="aOd-1r-MH8" secondAttribute="centerY" id="hlP-Ml-f91"/>
+                                            </constraints>
                                         </collectionViewCellContentView>
+                                        <color key="backgroundColor" systemColor="systemMintColor"/>
+                                        <connections>
+                                            <outlet property="textLabel" destination="8aV-HY-OFY" id="ulL-Zm-na2"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -67,6 +84,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="ufD-An-UHd"/>
                     <connections>
+                        <outlet property="collectionView" destination="SUa-Bz-X54" id="WUM-bo-LYS"/>
                         <outlet property="scoreLabel" destination="tql-4y-hdk" id="kmT-xZ-kmb"/>
                     </connections>
                 </viewController>
@@ -150,6 +168,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemMintColor">
+            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

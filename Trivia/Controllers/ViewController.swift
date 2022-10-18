@@ -7,11 +7,13 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     @IBOutlet weak var scoreLabel: UILabel!
     
     var questions = [Question]()
-    var gameModelController: GameModelController!
+    var gameModelController: GameController!
+    var categories = [Category]()
+    @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewWillAppear(_ animated: Bool) {
         scoreLabel.text = "Score: \(gameModelController.game.score)"
@@ -19,6 +21,9 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
     }
     
     func parse(json: Data) {
@@ -41,7 +46,7 @@ class ViewController: UIViewController {
 
     func showError() {
         DispatchQueue.main.async { [weak self] in
-            let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading the feed; please check your connection and try again.", preferredStyle: .alert)
+            let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading question; please check your connection and try again.", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "OK", style: .default))
             self?.present(ac, animated: true)
         }
@@ -50,7 +55,7 @@ class ViewController: UIViewController {
     @IBAction func startTapped(_ sender: UIButton) {
         let urlString: String
         
-        urlString = "https://opentdb.com/api.php?amount=10&token=\(gameModelController.game.token)"
+        urlString = "https://opentdb.com/api.php?amount=3&token=\(gameModelController.game.token)"
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             if let url = URL(string: urlString) {
@@ -62,6 +67,20 @@ class ViewController: UIViewController {
             }
             self?.showError()
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return categories.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Category", for: indexPath) as? CategoryCell else {
+            fatalError("Unable to dequeue CategoryCell")
+        }
+        
+        cell.textLabel.text = categories[indexPath.row].name
+        
+        return cell
     }
 }
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class GameModelController {
+class GameController {
     var game = Game(
         score: 0,
         token: ""

@@ -20,8 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let navigationController = window?.rootViewController as! UINavigationController
         let firstVC = navigationController.viewControllers[0] as! ViewController
-        firstVC.gameModelController = GameModelController()
-
+        firstVC.gameModelController = GameController()
+        firstVC.categories = loadJson() ?? [Category]()
+print(firstVC.categories)
         
         
 //        if let mainViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(identifier: "MainViewController") as? ViewController {
@@ -30,6 +31,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        }
     }
 
+    func loadJson() -> [Category]? {
+        if let url = Bundle.main.url(forResource: "categories", withExtension: "json") {
+            do {
+                let data = try Data(contentsOf: url)
+                let decoder = JSONDecoder()
+                let jsonData = try decoder.decode(Categories.self, from: data)
+                return jsonData.categories
+            } catch {
+                print("error:\(error)")
+            }
+        }
+        return nil
+    }
+    
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

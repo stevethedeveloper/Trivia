@@ -13,7 +13,7 @@ class QuestionViewController: UIViewController {
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var difficultyLabel: UILabel!
     
-    var gameModelController: GameModelController!
+    var gameModelController: GameController!
     var questions: [Question]!
     var currentQuestion: Question!
     var currentQuestionNumber: Int = 0
