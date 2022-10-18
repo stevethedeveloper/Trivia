@@ -52,8 +52,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
 
-    @IBAction func startTapped(_ sender: UIButton) {
+    func startTapped(_ sender: UIButton) {
         let urlString: String
+        
+        print(sender.tag)
         
         urlString = "https://opentdb.com/api.php?amount=3&token=\(gameModelController.game.token)"
         
@@ -69,6 +71,25 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let categoryId = categories[indexPath.row].id
+
+        let urlString: String
+        
+        urlString = "https://opentdb.com/api.php?category=\(categoryId)&amount=3&token=\(gameModelController.game.token)"
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            if let url = URL(string: urlString) {
+                if let data = try? Data(contentsOf: url) {
+                    self?.parse(json: data)
+                    self?.loadRound()
+                    return
+                }
+            }
+            self?.showError()
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categories.count
     }
@@ -79,6 +100,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         
         cell.textLabel.text = categories[indexPath.row].name
+        cell.image.text = categories[indexPath.row].image
+        cell.tag = categories[indexPath.row].id
         
         return cell
     }

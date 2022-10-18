@@ -22,13 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let firstVC = navigationController.viewControllers[0] as! ViewController
         firstVC.gameModelController = GameController()
         firstVC.categories = loadJson() ?? [Category]()
-print(firstVC.categories)
-        
-        
-//        if let mainViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(identifier: "MainViewController") as? ViewController {
-//            let gameController = GameModelController()
-//            mainViewController.gameModelController = gameController
-//        }
     }
 
     func loadJson() -> [Category]? {

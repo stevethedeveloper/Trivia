@@ -3,67 +3,62 @@
     {
       "id": 9,
       "name": "General",
-      "image": ""
+      "image": "⁉️"
     },
     {
       "id": 10,
       "name": "Books",
-      "image": ""
+      "image": "📚"
     },
     {
       "id": 11,
       "name": "Film",
-      "image": ""
+      "image": "🎞"
     },
     {
       "id": 12,
       "name": "Music",
-      "image": ""
+      "image": "🎶"
     },
     {
       "id": 14,
       "name": "Television",
-      "image": ""
+      "image": "📺"
     },
     {
       "id": 15,
       "name": "Video Games",
-      "image": ""
+      "image": "🕹"
     },
     {
       "id": 17,
       "name": "Science & Nature",
-      "image": ""
+      "image": "🔬"
     },
     {
       "id": 18,
       "name": "Computers",
-      "image": ""
+      "image": "💻"
     },
     {
       "id": 21,
       "name": "Sports",
-      "image": ""
+      "image": "🏀"
     },
     {
       "id": 22,
       "name": "Geography",
-      "image": ""
+      "image": "🌎"
     },
     {
       "id": 23,
       "name": "History",
-      "image": ""
-    },
-    {
-      "id": 31,
-      "name": "Anime & Manga",
-      "image": ""
+      "image": "📜"
     },
     {
       "id": 32,
       "name": "Cartoon & Animations",
-      "image": ""
+      "image": "🐥"
     }
   ]
 }
