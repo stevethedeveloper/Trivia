@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var scoreLabel: UILabel!
     
     var questions = [Question]()
@@ -16,7 +16,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewWillAppear(_ animated: Bool) {
-        scoreLabel.text = "Score: \(gameModelController.game.score)"
+        scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
     }
     
     override func viewDidLoad() {
@@ -28,7 +28,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func parse(json: Data) {
         let decoder = JSONDecoder()
-
+        
         if let jsonQuestions = try? decoder.decode(Questions.self, from: json) {
             questions = jsonQuestions.results
         }
@@ -43,7 +43,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             }
         }
     }
-
+    
     func showError() {
         DispatchQueue.main.async { [weak self] in
             let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading question; please check your connection and try again.", preferredStyle: .alert)
@@ -51,7 +51,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             self?.present(ac, animated: true)
         }
     }
-
+    
     func startTapped(_ sender: UIButton) {
         let urlString: String
         
@@ -70,10 +70,21 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             self?.showError()
         }
     }
-
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        if UIScreen.main.nativeBounds.width <= 800 {
+            return CGSize(width: 150, height: 150)
+        }
+        
+        return CGSize(width: 165, height: 165)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let categoryId = categories[indexPath.row].id
-
+        
+        print(indexPath.row)
+        
         let urlString: String
         
         urlString = "https://opentdb.com/api.php?category=\(categoryId)&amount=3&token=\(gameModelController.game.token)"
@@ -97,6 +108,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Category", for: indexPath) as? CategoryCell else {
             fatalError("Unable to dequeue CategoryCell")
+        }
+        
+        if indexPath.row > 4 {
+            cell.isUserInteractionEnabled = false
+        } else {
+            cell.isUserInteractionEnabled = true
         }
         
         cell.textLabel.text = categories[indexPath.row].name
