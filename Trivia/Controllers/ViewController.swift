@@ -110,10 +110,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             fatalError("Unable to dequeue CategoryCell")
         }
         
-        if indexPath.row > 4 {
+        if indexPath.row > 3 {
             cell.isUserInteractionEnabled = false
+            cell.lockView.isHidden = false
         } else {
             cell.isUserInteractionEnabled = true
+            cell.lockView.isHidden = true
         }
         
         cell.textLabel.text = categories[indexPath.row].name

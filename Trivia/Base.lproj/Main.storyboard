@@ -34,7 +34,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8aV-HY-OFY">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8aV-HY-OFY">
                                                     <rect key="frame" x="8" y="111" width="149" height="46"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="46" id="Xoc-bY-phl"/>
@@ -49,12 +49,34 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNL-pa-8A9">
+                                                    <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🔒" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pTx-56-ySq">
+                                                            <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="100"/>
+                                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" systemColor="systemGray2Color"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="pTx-56-ySq" secondAttribute="trailing" id="G1c-FB-LSF"/>
+                                                        <constraint firstItem="pTx-56-ySq" firstAttribute="top" secondItem="JNL-pa-8A9" secondAttribute="top" id="Jgs-aj-jYb"/>
+                                                        <constraint firstItem="pTx-56-ySq" firstAttribute="leading" secondItem="JNL-pa-8A9" secondAttribute="leading" id="O08-XI-wxe"/>
+                                                        <constraint firstAttribute="bottom" secondItem="pTx-56-ySq" secondAttribute="bottom" id="eLE-Wf-klu"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="8aV-HY-OFY" secondAttribute="trailing" constant="8" id="H4e-qy-2Ks"/>
+                                                <constraint firstItem="JNL-pa-8A9" firstAttribute="top" secondItem="aOd-1r-MH8" secondAttribute="top" id="Q5O-oY-NOW"/>
+                                                <constraint firstAttribute="trailing" secondItem="JNL-pa-8A9" secondAttribute="trailing" id="UDz-Up-BZj"/>
+                                                <constraint firstAttribute="bottom" secondItem="JNL-pa-8A9" secondAttribute="bottom" id="Uwn-zh-eS5"/>
                                                 <constraint firstItem="nCP-lN-UmO" firstAttribute="leading" secondItem="aOd-1r-MH8" secondAttribute="leading" constant="25" id="X6M-SL-9aH"/>
                                                 <constraint firstItem="8aV-HY-OFY" firstAttribute="top" secondItem="nCP-lN-UmO" secondAttribute="bottom" constant="10" id="jf4-de-Tf3"/>
                                                 <constraint firstAttribute="trailing" secondItem="nCP-lN-UmO" secondAttribute="trailing" constant="25" id="luS-IY-FX8"/>
+                                                <constraint firstItem="JNL-pa-8A9" firstAttribute="leading" secondItem="aOd-1r-MH8" secondAttribute="leading" id="mhs-As-jmC"/>
                                                 <constraint firstItem="nCP-lN-UmO" firstAttribute="top" secondItem="aOd-1r-MH8" secondAttribute="top" constant="20" id="pLj-gR-aZ5"/>
                                                 <constraint firstItem="8aV-HY-OFY" firstAttribute="leading" secondItem="aOd-1r-MH8" secondAttribute="leading" constant="8" id="prY-nb-Inx"/>
                                                 <constraint firstAttribute="bottom" secondItem="8aV-HY-OFY" secondAttribute="bottom" constant="8" id="xlp-mi-UVT"/>
@@ -68,6 +90,7 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="image" destination="nCP-lN-UmO" id="PJH-yc-ywS"/>
+                                            <outlet property="lockView" destination="JNL-pa-8A9" id="nwl-8d-ol1"/>
                                             <outlet property="textLabel" destination="8aV-HY-OFY" id="ulL-Zm-na2"/>
                                         </connections>
                                     </collectionViewCell>
@@ -177,6 +200,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
