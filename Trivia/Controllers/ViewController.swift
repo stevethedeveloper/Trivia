@@ -13,10 +13,19 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var questions = [Question]()
     var gameModelController: GameController!
     var categories = [Category]()
+    var emojiFontSizeConstant = 0
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
         scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
+        title = ""
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     override func viewDidLoad() {
@@ -74,16 +83,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if UIScreen.main.nativeBounds.width <= 800 {
-            return CGSize(width: 150, height: 150)
+            emojiFontSizeConstant = -60
+            return CGSize(width: 120, height: 120)
         }
         
+        emojiFontSizeConstant = 0
         return CGSize(width: 165, height: 165)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let categoryId = categories[indexPath.row].id
-        
-        print(indexPath.row)
         
         let urlString: String
         
@@ -113,13 +122,23 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if indexPath.row > 3 {
             cell.isUserInteractionEnabled = false
             cell.lockView.isHidden = false
+            cell.layer.borderColor = UIColor.systemGray.cgColor
         } else {
             cell.isUserInteractionEnabled = true
             cell.lockView.isHidden = true
+            cell.layer.borderColor = UIColor.systemGreen.cgColor
+            cell.layer.backgroundColor = UIColor.white.cgColor
         }
-        
+
+        cell.layer.borderWidth = 1
+        cell.isSelected = true
+
         cell.textLabel.text = categories[indexPath.row].name
         cell.image.text = categories[indexPath.row].image
+        print(cell.image.frame.width)
+        let fontSize = cell.image.frame.width + CGFloat(emojiFontSizeConstant)
+        cell.image.font = cell.image.font.withSize(fontSize)
+        
         cell.tag = categories[indexPath.row].id
         
         return cell

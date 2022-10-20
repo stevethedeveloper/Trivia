@@ -26,6 +26,11 @@ class QuestionViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+
+//        navigationController?.navigationBar.backgroundColor = UIColor.systemGreen
+//        navigationController?.navigationBar.layer.opacity = 0.17
         score = gameModelController.game.score
         nextQuestion()
     }
