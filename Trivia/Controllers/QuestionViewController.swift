@@ -11,7 +11,9 @@ class QuestionViewController: UIViewController {
 
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var starsLabel: UILabel!
     @IBOutlet weak var difficultyLabel: UILabel!
+    @IBOutlet weak var progressLabel: UILabel!
     
     var gameModelController: GameController!
     var questions: [Question]!
@@ -22,6 +24,7 @@ class QuestionViewController: UIViewController {
         didSet {
             gameModelController.game.score = score
             scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
+            gameModelController.saveGameState()
         }
     }
     
@@ -31,12 +34,13 @@ class QuestionViewController: UIViewController {
 
 //        navigationController?.navigationBar.backgroundColor = UIColor.systemGreen
 //        navigationController?.navigationBar.layer.opacity = 0.17
-        score = gameModelController.game.score
-        nextQuestion()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        progressLabel.text = ""
+        score = gameModelController.game.score
+        nextQuestion()
     }
     
     func loadQuestion() {
@@ -82,16 +86,27 @@ class QuestionViewController: UIViewController {
             score += DifficultyPoints(rawValue: currentQuestion.difficulty)?.pointsValue ?? 0
             result = "Correct!"
             correctAnswer = ""
+            if let progressText = progressLabel.text {
+                progressLabel.text = progressText + "✓ "
+            }
         } else {
             result = "Incorrect!"
             correctAnswer = "Correct answer: \(String(htmlEncodedString: currentQuestion.correct_answer) ?? "")"
+            if let progressText = progressLabel.text {
+                progressLabel.text = progressText + "ⅹ "
+            }
         }
+
+        // Calls extension to set size and color or certain characters in string.  This is necessary because the checkmark and x are different sizes and colors.  Results get assigned to progressLabel.
+        let searchChar = "ⅹ"
+        let progressLabelAttributedText = NSMutableAttributedString(string: progressLabel.text ?? "")
+        progressLabelAttributedText.attributeRangeFor(searchString: searchChar, attributeValue: UIColor.red, attributeType: .Color, attributeSearchType: .All)
+        progressLabelAttributedText.attributeRangeFor(searchString: searchChar, attributeValue: UIFont(name: progressLabel.font.fontName, size: 24.0)!, attributeType: .Size, attributeSearchType: .All)
+        progressLabel.attributedText = progressLabelAttributedText
 
         let ac = UIAlertController(title: result, message: correctAnswer, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: continueRound))
         present(ac, animated: true)
-
-//        nextQuestion()
     }
 
     func continueRound(action: UIAlertAction) {

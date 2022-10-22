@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    let gameModelController: GameController = GameController()
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -20,22 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let navigationController = window?.rootViewController as! UINavigationController
         let firstVC = navigationController.viewControllers[0] as! ViewController
-        firstVC.gameModelController = GameController()
-        firstVC.categories = loadJson() ?? [Category]()
-    }
-
-    func loadJson() -> [Category]? {
-        if let url = Bundle.main.url(forResource: "categories", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                let jsonData = try decoder.decode(Categories.self, from: data)
-                return jsonData.categories
-            } catch {
-                print("error:\(error)")
-            }
-        }
-        return nil
+        firstVC.gameModelController = gameModelController
+        firstVC.categories = firstVC.gameModelController.game.categories
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -53,6 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
+        gameModelController.saveGameState()
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {

@@ -9,18 +9,35 @@ import UIKit
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var coinsLabel: UILabel!
+    @IBOutlet weak var starsLabel: UILabel!
+    @IBOutlet weak var levelLabel: UILabel!
     
     var questions = [Question]()
     var gameModelController: GameController!
     var categories = [Category]()
-    var emojiFontSizeConstant = 0
+    var emojiFontSize = 0
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
+        setUpHeaderAndFooter()
         title = ""
+        gameModelController.saveGameState()
+        levelLabel.text = "Level \(gameModelController.game.currentLevel)"
+    }
+    
+    private func setUpHeaderAndFooter() {
+        scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
+        coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
+
+        let starsLabelText = gameModelController.starsText[gameModelController.game.stars]
+//        starsLabel.text = gameModelController.starsText[gameModelController.game.stars]
+        let searchChar = "☆"
+        let starsLabelAttributedText = NSMutableAttributedString(string: starsLabelText ?? "")
+        starsLabelAttributedText.attributeRangeFor(searchString: searchChar, attributeValue: UIFont(name: starsLabel.font.fontName, size: 17.0)!, attributeType: .Size, attributeSearchType: .All)
+        starsLabel.attributedText = starsLabelAttributedText
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -61,33 +78,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    func startTapped(_ sender: UIButton) {
-        let urlString: String
-        
-        print(sender.tag)
-        
-        urlString = "https://opentdb.com/api.php?amount=3&token=\(gameModelController.game.token)"
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            if let url = URL(string: urlString) {
-                if let data = try? Data(contentsOf: url) {
-                    self?.parse(json: data)
-                    self?.loadRound()
-                    return
-                }
-            }
-            self?.showError()
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if UIScreen.main.nativeBounds.width <= 800 {
-            emojiFontSizeConstant = -60
+            emojiFontSize = 60
             return CGSize(width: 120, height: 120)
         }
         
-        emojiFontSizeConstant = 0
+        emojiFontSize = 100
         return CGSize(width: 165, height: 165)
     }
     
@@ -96,7 +94,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let urlString: String
         
-        urlString = "https://opentdb.com/api.php?category=\(categoryId)&amount=3&token=\(gameModelController.game.token)"
+        urlString = "https://opentdb.com/api.php?category=\(categoryId)&amount=5&difficulty=\(gameModelController.getCurrentLevelDifficulty())&token=\(gameModelController.game.token)"
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             if let url = URL(string: urlString) {
@@ -135,8 +133,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
         cell.textLabel.text = categories[indexPath.row].name
         cell.image.text = categories[indexPath.row].image
-        print(cell.image.frame.width)
-        let fontSize = cell.image.frame.width + CGFloat(emojiFontSizeConstant)
+
+        let fontSize = CGFloat(emojiFontSize)
         cell.image.font = cell.image.font.withSize(fontSize)
         
         cell.tag = categories[indexPath.row].id

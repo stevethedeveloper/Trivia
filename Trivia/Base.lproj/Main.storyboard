@@ -122,14 +122,30 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⭐️  ☆ ☆ ☆ ☆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0lt-1W-U8d">
+                                        <rect key="frame" x="224.5" y="12.5" width="95.5" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.86665052180000002" green="0.9647092223" blue="0.89411896469999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="477-Uq-57H" firstAttribute="centerY" secondItem="29A-4E-cZt" secondAttribute="centerY" id="3hA-fr-lov"/>
+                                    <constraint firstItem="0lt-1W-U8d" firstAttribute="height" secondItem="477-Uq-57H" secondAttribute="height" id="M3X-hW-r9P"/>
+                                    <constraint firstItem="477-Uq-57H" firstAttribute="leading" secondItem="0lt-1W-U8d" secondAttribute="trailing" constant="28" id="MHL-Cu-6XB"/>
+                                    <constraint firstItem="0lt-1W-U8d" firstAttribute="centerY" secondItem="29A-4E-cZt" secondAttribute="centerY" id="ZyJ-Na-K9A"/>
                                     <constraint firstAttribute="height" constant="42" id="ejQ-Uh-2JW"/>
                                     <constraint firstAttribute="trailing" secondItem="477-Uq-57H" secondAttribute="trailing" constant="16" id="oDA-ny-IDb"/>
+                                    <constraint firstItem="0lt-1W-U8d" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="29A-4E-cZt" secondAttribute="leading" constant="20" symbolic="YES" id="w52-pN-XMj"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Level" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9lr-eo-Hbe">
+                                <rect key="frame" x="168" y="136" width="78.5" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -139,17 +155,22 @@
                             <constraint firstItem="29A-4E-cZt" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="8aC-nU-Kvr"/>
                             <constraint firstItem="29A-4E-cZt" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="BrY-w9-bv2"/>
                             <constraint firstItem="YsA-yA-eRx" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="IoN-kh-R41"/>
+                            <constraint firstItem="9lr-eo-Hbe" firstAttribute="top" secondItem="29A-4E-cZt" secondAttribute="bottom" constant="6" id="IqD-OU-U4E"/>
+                            <constraint firstItem="9lr-eo-Hbe" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ywb-Z7-YX1"/>
                             <constraint firstAttribute="bottom" secondItem="YsA-yA-eRx" secondAttribute="bottom" id="buC-Cc-0U5"/>
-                            <constraint firstItem="SUa-Bz-X54" firstAttribute="top" secondItem="29A-4E-cZt" secondAttribute="bottom" constant="50" id="jxp-R0-6CA"/>
                             <constraint firstItem="YsA-yA-eRx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="mO2-gJ-rbQ"/>
+                            <constraint firstItem="SUa-Bz-X54" firstAttribute="top" secondItem="9lr-eo-Hbe" secondAttribute="bottom" constant="2" id="nfM-HM-ont"/>
                             <constraint firstItem="29A-4E-cZt" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="nz5-th-o5Y"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="SUa-Bz-X54" secondAttribute="trailing" constant="20" id="ona-Y1-FXd"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ufD-An-UHd"/>
                     <connections>
+                        <outlet property="coinsLabel" destination="477-Uq-57H" id="0g3-Rs-Gfl"/>
                         <outlet property="collectionView" destination="SUa-Bz-X54" id="WUM-bo-LYS"/>
+                        <outlet property="levelLabel" destination="9lr-eo-Hbe" id="u5s-bJ-x87"/>
                         <outlet property="scoreLabel" destination="tql-4y-hdk" id="kmT-xZ-kmb"/>
+                        <outlet property="starsLabel" destination="0lt-1W-U8d" id="WIk-Yb-vhO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -194,10 +215,27 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⭐️ ☆ ☆ ☆ ☆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1xH-oe-zVi">
+                                        <rect key="frame" x="228" y="12.5" width="92" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✓ ✓ ✓ ⅹ ✓" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RC0-s9-gvG">
+                                        <rect key="frame" x="8" y="8" width="106" height="26"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                        <color key="textColor" systemColor="systemGreenColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.86665052180000002" green="0.9647092223" blue="0.89411896469999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="1xH-oe-zVi" firstAttribute="centerY" secondItem="7ZP-w2-Nnw" secondAttribute="centerY" id="0o8-Y7-tfe"/>
+                                    <constraint firstItem="RC0-s9-gvG" firstAttribute="leading" secondItem="7ZP-w2-Nnw" secondAttribute="leading" constant="8" id="3P3-2W-xO5"/>
+                                    <constraint firstItem="1xH-oe-zVi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RC0-s9-gvG" secondAttribute="trailing" constant="60" id="3sG-kD-Re3"/>
                                     <constraint firstItem="q2g-6I-oOa" firstAttribute="centerY" secondItem="7ZP-w2-Nnw" secondAttribute="centerY" id="EDo-wY-vsu"/>
+                                    <constraint firstItem="q2g-6I-oOa" firstAttribute="leading" secondItem="1xH-oe-zVi" secondAttribute="trailing" constant="28" id="Zam-fg-VaM"/>
+                                    <constraint firstItem="RC0-s9-gvG" firstAttribute="centerY" secondItem="7ZP-w2-Nnw" secondAttribute="centerY" id="tkh-zh-2Qh"/>
                                     <constraint firstAttribute="trailing" secondItem="q2g-6I-oOa" secondAttribute="trailing" constant="16" id="u3e-i6-fcj"/>
                                     <constraint firstAttribute="height" constant="42" id="x1K-bY-I1M"/>
                                 </constraints>
@@ -222,8 +260,10 @@
                     <navigationItem key="navigationItem" id="70B-uc-UBL"/>
                     <connections>
                         <outlet property="difficultyLabel" destination="nDk-43-eq1" id="xg3-MK-uVU"/>
+                        <outlet property="progressLabel" destination="RC0-s9-gvG" id="gmi-V2-Tza"/>
                         <outlet property="questionLabel" destination="4rb-hX-dOp" id="IaP-3O-7Am"/>
                         <outlet property="scoreLabel" destination="hzl-N7-aOE" id="8xt-Xm-Ayf"/>
+                        <outlet property="starsLabel" destination="1xH-oe-zVi" id="ezL-Uy-4hO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m6L-6T-BQX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -255,6 +295,9 @@
         </systemColor>
         <systemColor name="systemGray2Color">
             <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
