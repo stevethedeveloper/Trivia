@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct Categories: Codable {
+class Categories: Codable {
     var categories: [Category]    
 }

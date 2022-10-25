@@ -7,12 +7,10 @@
 
 import Foundation
 
-struct Game {
+struct Game: Codable {
     var score: Int
     var token: String
     var currentLevel: Int
-    var currentLevelDifficulty: String
-    var currentRound: Int
     var categoriesCleared: [Category]
     var coins: Int
     var stars: Int

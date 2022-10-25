@@ -13,12 +13,10 @@ final class GameController {
         score: 0,
         token: "",
         currentLevel: 1,
-        currentLevelDifficulty: "easy",
-        currentRound: 0,
-        categoriesCleared: [],
+        categoriesCleared: [Category](),
         coins: 0,
         stars: 0,
-        categories: []
+        categories: [Category]()
     )
     
     let starsText = [
@@ -32,33 +30,27 @@ final class GameController {
     
     init() {
         // Take care of first setup.  Get token, load the game state, and list of categories
-        getToken()
         loadGameState()
-        game.categories = loadCategoriesFromJSON() ?? []
+        getToken()
     }
     
     // Load game state from user defaults
     func loadGameState() {
-        let defaults = UserDefaults.standard
-
-        // load previous score
-        let score = defaults.integer(forKey: "score")
-        self.game.score = score
-        
-        // load current level
-        let currentLevel = defaults.integer(forKey: "currentLevel")
-        self.game.currentLevel = (currentLevel == 0) ? 1 : currentLevel
+        if let data = UserDefaults.standard.object(forKey: "game") as? Data,
+           let game = try? JSONDecoder().decode(Game.self, from: data) {
+            self.game = game
+        } else {
+            let allCategories = loadCategoriesFromJSON() ?? []
+            game.categories = Array(allCategories.prefix(8)).shuffled()
+        }
+        print(game)
     }
 
     // Save game state to user defaults
     func saveGameState() {
-        let defaults = UserDefaults.standard
-        
-        // save previous score
-        defaults.set(game.score, forKey: "score")
-        
-        // save current level
-        defaults.set(game.currentLevel, forKey: "currentLevel")
+        if let encoded = try? JSONEncoder().encode(game) {
+            UserDefaults.standard.set(encoded, forKey: "game")
+        }
     }
     
     // This is called on init, but also can be called elsewhere if a new token is needed

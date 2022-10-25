@@ -117,16 +117,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             fatalError("Unable to dequeue CategoryCell")
         }
         
-        if indexPath.row > 3 {
-            cell.isUserInteractionEnabled = false
-            cell.lockView.isHidden = false
-            cell.layer.borderColor = UIColor.systemGray.cgColor
-        } else {
+//        if indexPath.row > 3 {
+//            cell.isUserInteractionEnabled = false
+//            cell.lockView.isHidden = false
+//            cell.layer.borderColor = UIColor.systemGray.cgColor
+//        } else {
             cell.isUserInteractionEnabled = true
             cell.lockView.isHidden = true
             cell.layer.borderColor = UIColor.systemGreen.cgColor
             cell.layer.backgroundColor = UIColor.white.cgColor
-        }
+//        }
 
         cell.layer.borderWidth = 1
         cell.isSelected = true
