@@ -135,6 +135,7 @@ class QuestionViewController: UIViewController {
             if correctAnswerCount >= 3 {
                 gameModelController.game.categoriesCleared.append(gameModelController.game.categories[currentCategory])
                 gameModelController.game.stars += 1
+                gameModelController.game.coins += 1
             }
             navigationController?.popViewController(animated: true)
             return

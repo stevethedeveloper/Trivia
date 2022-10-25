@@ -24,18 +24,26 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationController?.setNavigationBarHidden(true, animated: animated)
         setUpHeaderAndFooter()
         title = ""
-        gameModelController.saveGameState()
-        levelLabel.text = "Level \(gameModelController.game.currentLevel)"
         
-        collectionView.reloadData()
+        // Any time we return, update the game state
+        gameModelController.saveGameState()
+        
+        // Always get a fresh view
+        if gameModelController.game.stars < 5 {
+            collectionView.reloadData()
+        } else {
+            // Move to next level
+            loadNextLevel()
+        }
+        
     }
     
     private func setUpHeaderAndFooter() {
         scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
         coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
+        levelLabel.text = "Level \(gameModelController.game.currentLevel)"
 
         let starsLabelText = gameModelController.starsText[gameModelController.game.stars]
-        starsLabel.text = gameModelController.starsText[gameModelController.game.stars]
         let searchChar = "☆"
         let starsLabelAttributedText = NSMutableAttributedString(string: starsLabelText ?? "")
         starsLabelAttributedText.attributeRangeFor(searchString: searchChar, attributeValue: UIFont(name: starsLabel.font.fontName, size: 17.0)!, attributeType: .Size, attributeSearchType: .All)
@@ -54,6 +62,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView.dataSource = self
     }
     
+    func loadNextLevel() {
+        gameModelController.loadNewLevel()
+        collectionView.reloadData()
+        setUpHeaderAndFooter()
+    }
+
     func parse(json: Data) {
         let decoder = JSONDecoder()
         

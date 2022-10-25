@@ -31,7 +31,16 @@ final class GameController {
     init() {
         // Take care of first setup.  Get token, load the game state, and list of categories
         loadGameState()
-        getToken()
+
+        
+        
+        
+        
+        
+        
+        
+        
+//        getToken()
     }
     
     // Load game state from user defaults
@@ -52,7 +61,18 @@ final class GameController {
             UserDefaults.standard.set(encoded, forKey: "game")
         }
     }
-    
+
+    func loadNewLevel() {
+        game.currentLevel += 1
+        game.stars = 0
+        game.categoriesCleared.removeAll()
+        game.categories.removeAll()
+        let allCategories = loadCategoriesFromJSON() ?? []
+        game.categories = Array(allCategories.prefix(8)).shuffled()
+
+        saveGameState()
+    }
+
     // This is called on init, but also can be called elsewhere if a new token is needed
     func getToken() {
         // get new token
