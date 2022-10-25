@@ -17,6 +17,7 @@ class QuestionViewController: UIViewController {
     
     var gameModelController: GameController!
     var questions: [Question]!
+    var currentCategory: Int! = -1
     var currentQuestion: Question!
     var currentQuestionNumber: Int = 0
     var questionButtons = [UIButton]()
@@ -27,6 +28,7 @@ class QuestionViewController: UIViewController {
             gameModelController.saveGameState()
         }
     }
+    var correctAnswerCount = 0
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -40,6 +42,7 @@ class QuestionViewController: UIViewController {
         super.viewDidLoad()
         progressLabel.text = ""
         score = gameModelController.game.score
+print(currentCategory)
         nextQuestion()
     }
     
@@ -89,6 +92,7 @@ class QuestionViewController: UIViewController {
             if let progressText = progressLabel.text {
                 progressLabel.text = progressText + "✓ "
             }
+            correctAnswerCount += 1
         } else {
             result = "Incorrect!"
             correctAnswer = "Correct answer: \(String(htmlEncodedString: currentQuestion.correct_answer) ?? "")"
@@ -115,6 +119,9 @@ class QuestionViewController: UIViewController {
     
     func nextQuestion() {
         guard questions.count > 0 else {
+            if correctAnswerCount >= 3 {
+                gameModelController.game.categoriesCleared.append(gameModelController.game.categories[currentCategory])
+            }
             navigationController?.popViewController(animated: true)
             return
         }

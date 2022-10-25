@@ -12,12 +12,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet weak var coinsLabel: UILabel!
     @IBOutlet weak var starsLabel: UILabel!
     @IBOutlet weak var levelLabel: UILabel!
-    
+    @IBOutlet weak var collectionView: UICollectionView!
+
     var questions = [Question]()
     var gameModelController: GameController!
     var categories = [Category]()
     var emojiFontSize = 0
-    @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -26,6 +26,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         title = ""
         gameModelController.saveGameState()
         levelLabel.text = "Level \(gameModelController.game.currentLevel)"
+        
+        collectionView.reloadData()
     }
     
     private func setUpHeaderAndFooter() {
@@ -60,9 +62,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    func loadRound() {
+    func loadRound(forCategory category: Int) {
         DispatchQueue.main.async { [weak self] in
             if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
+                vc.currentCategory = category
                 vc.questions = self?.questions
                 vc.gameModelController = self?.gameModelController
                 self?.navigationController?.pushViewController(vc, animated: true)
@@ -100,7 +103,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             if let url = URL(string: urlString) {
                 if let data = try? Data(contentsOf: url) {
                     self?.parse(json: data)
-                    self?.loadRound()
+                    self?.loadRound(forCategory: indexPath.row)
                     return
                 }
             }
@@ -117,16 +120,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             fatalError("Unable to dequeue CategoryCell")
         }
         
-//        if indexPath.row > 3 {
-//            cell.isUserInteractionEnabled = false
-//            cell.lockView.isHidden = false
-//            cell.layer.borderColor = UIColor.systemGray.cgColor
-//        } else {
+        if gameModelController.game.categoriesCleared.contains(gameModelController.game.categories[indexPath.row]) {
+            cell.isUserInteractionEnabled = false
+            cell.lockView.isHidden = false
+            cell.layer.borderColor = UIColor.systemGray.cgColor
+        } else {
             cell.isUserInteractionEnabled = true
             cell.lockView.isHidden = true
             cell.layer.borderColor = UIColor.systemGreen.cgColor
             cell.layer.backgroundColor = UIColor.white.cgColor
-//        }
+        }
 
         cell.layer.borderWidth = 1
         cell.isSelected = true
