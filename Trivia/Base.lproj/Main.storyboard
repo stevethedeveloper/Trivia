@@ -259,6 +259,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="70B-uc-UBL"/>
                     <connections>
+                        <outlet property="coinsLabel" destination="q2g-6I-oOa" id="wfJ-m3-Wbh"/>
                         <outlet property="difficultyLabel" destination="nDk-43-eq1" id="xg3-MK-uVU"/>
                         <outlet property="progressLabel" destination="RC0-s9-gvG" id="gmi-V2-Tza"/>
                         <outlet property="questionLabel" destination="4rb-hX-dOp" id="IaP-3O-7Am"/>

@@ -12,6 +12,7 @@ class QuestionViewController: UIViewController {
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var starsLabel: UILabel!
+    @IBOutlet weak var coinsLabel: UILabel!
     @IBOutlet weak var difficultyLabel: UILabel!
     @IBOutlet weak var progressLabel: UILabel!
     
@@ -34,6 +35,7 @@ class QuestionViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
 
+        setUpHeaderAndFooter()
 //        navigationController?.navigationBar.backgroundColor = UIColor.systemGreen
 //        navigationController?.navigationBar.layer.opacity = 0.17
     }
@@ -42,10 +44,21 @@ class QuestionViewController: UIViewController {
         super.viewDidLoad()
         progressLabel.text = ""
         score = gameModelController.game.score
-print(currentCategory)
         nextQuestion()
     }
-    
+
+    private func setUpHeaderAndFooter() {
+        scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
+        coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
+
+        let starsLabelText = gameModelController.starsText[gameModelController.game.stars]
+        starsLabel.text = gameModelController.starsText[gameModelController.game.stars]
+        let searchChar = "☆"
+        let starsLabelAttributedText = NSMutableAttributedString(string: starsLabelText ?? "")
+        starsLabelAttributedText.attributeRangeFor(searchString: searchChar, attributeValue: UIFont(name: starsLabel.font.fontName, size: 17.0)!, attributeType: .Size, attributeSearchType: .All)
+        starsLabel.attributedText = starsLabelAttributedText
+    }
+
     func loadQuestion() {
         clearAnswers()
         questionLabel.text = String(htmlEncodedString: currentQuestion.question)
@@ -121,6 +134,7 @@ print(currentCategory)
         guard questions.count > 0 else {
             if correctAnswerCount >= 3 {
                 gameModelController.game.categoriesCleared.append(gameModelController.game.categories[currentCategory])
+                gameModelController.game.stars += 1
             }
             navigationController?.popViewController(animated: true)
             return

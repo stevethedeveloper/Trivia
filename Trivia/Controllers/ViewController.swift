@@ -35,7 +35,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
 
         let starsLabelText = gameModelController.starsText[gameModelController.game.stars]
-//        starsLabel.text = gameModelController.starsText[gameModelController.game.stars]
+        starsLabel.text = gameModelController.starsText[gameModelController.game.stars]
         let searchChar = "☆"
         let starsLabelAttributedText = NSMutableAttributedString(string: starsLabelText ?? "")
         starsLabelAttributedText.attributeRangeFor(searchString: searchChar, attributeValue: UIFont(name: starsLabel.font.fontName, size: 17.0)!, attributeType: .Size, attributeSearchType: .All)

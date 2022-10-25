@@ -39,11 +39,11 @@ final class GameController {
         if let data = UserDefaults.standard.object(forKey: "game") as? Data,
            let game = try? JSONDecoder().decode(Game.self, from: data) {
             self.game = game
+            self.game.stars = self.game.categoriesCleared.count
         } else {
             let allCategories = loadCategoriesFromJSON() ?? []
             game.categories = Array(allCategories.prefix(8)).shuffled()
         }
-        print(game)
     }
 
     // Save game state to user defaults
