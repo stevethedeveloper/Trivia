@@ -17,7 +17,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var questions = [Question]()
     var gameModelController: GameController!
     var categories = [Category]()
-    var emojiFontSize = 0
+    var emojiFontSize = 0.0
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -97,13 +97,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        if UIScreen.main.nativeBounds.width <= 800 {
-            emojiFontSize = 60
-            return CGSize(width: 120, height: 120)
-        }
+        // Want a square, only need width
+        let width = view.frame.size.width
+        emojiFontSize = (width / 2) * 0.38
+        return CGSize(width: width * 0.38, height: width * 0.38)
         
-        emojiFontSize = 100
-        return CGSize(width: 165, height: 165)
+//        if UIScreen.main.nativeBounds.width <= 800 {
+//            emojiFontSize = 60
+//            return CGSize(width: 120, height: 120)
+//        }
+//
+//        emojiFontSize = 100
+//        return CGSize(width: 165, height: 165)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

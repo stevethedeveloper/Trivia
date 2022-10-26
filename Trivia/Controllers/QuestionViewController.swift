@@ -64,7 +64,7 @@ class QuestionViewController: UIViewController {
         questionLabel.text = String(htmlEncodedString: currentQuestion.question)
         difficultyLabel.text = "Difficulty: \(currentQuestion.difficulty.capitalized)"
 
-        let height = 40
+        var height = 40
         var answers: [String] = currentQuestion.incorrect_answers
         answers.append(currentQuestion.correct_answer)
         answers.shuffle()
@@ -74,7 +74,12 @@ class QuestionViewController: UIViewController {
             let answerButton = UIButton(type: .system)
             answerButton.translatesAutoresizingMaskIntoConstraints = false
             answerButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-            answerButton.setTitle(String(htmlEncodedString: answer), for: .normal)
+            answerButton.setTitle(String(htmlEncodedString: "This is the very super extremely long answer that should wrap \(answer)"), for: .normal)
+
+            answerButton.titleLabel?.numberOfLines = 0
+            answerButton.titleLabel?.lineBreakMode = .byWordWrapping
+            
+
             answerButton.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
             answerButton.layer.borderWidth = 1
             answerButton.layer.borderColor = UIColor.black.cgColor
