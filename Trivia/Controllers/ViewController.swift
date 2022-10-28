@@ -13,7 +13,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet weak var starsLabel: UILabel!
     @IBOutlet weak var levelLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
-
+    
     var questions = [Question]()
     var gameModelController: GameController!
     var categories = [Category]()
@@ -42,7 +42,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
         coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
         levelLabel.text = "Level \(gameModelController.game.currentLevel)"
-
+        
         let starsLabelText = gameModelController.starsText[gameModelController.game.stars]
         let searchChar = "☆"
         let starsLabelAttributedText = NSMutableAttributedString(string: starsLabelText ?? "")
@@ -67,7 +67,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView.reloadData()
         setUpHeaderAndFooter()
     }
-
+    
     func parse(json: Data) {
         let decoder = JSONDecoder()
         
@@ -95,20 +95,25 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    // Detect orientation change to force redraw
+    public override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        if UIDevice.current.orientation.isLandscape || UIDevice.current.orientation.isPortrait, let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.invalidateLayout()
+            collectionView.reloadData()
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         // Want a square, only need width
         let width = view.frame.size.width
-        emojiFontSize = (width / 2) * 0.38
-        return CGSize(width: width * 0.38, height: width * 0.38)
-        
-//        if UIScreen.main.nativeBounds.width <= 800 {
-//            emojiFontSize = 60
-//            return CGSize(width: 120, height: 120)
-//        }
-//
-//        emojiFontSize = 100
-//        return CGSize(width: 165, height: 165)
+        if UIDevice.current.orientation.isLandscape {
+            emojiFontSize = (width / 4) * 0.22
+            return CGSize(width: width * 0.18, height: width * 0.18)
+        } else {
+            emojiFontSize = (width / 2) * 0.38
+            return CGSize(width: width * 0.38, height: width * 0.38)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -149,13 +154,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             cell.layer.borderColor = UIColor.systemGreen.cgColor
             cell.layer.backgroundColor = UIColor.white.cgColor
         }
-
+        
         cell.layer.borderWidth = 1
         cell.isSelected = true
-
+        
         cell.textLabel.text = categories[indexPath.row].name
         cell.image.text = categories[indexPath.row].image
-
+        
         let fontSize = CGFloat(emojiFontSize)
         cell.image.font = cell.image.font.withSize(fontSize)
         

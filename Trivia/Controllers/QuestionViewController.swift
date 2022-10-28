@@ -13,7 +13,6 @@ class QuestionViewController: UIViewController {
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var starsLabel: UILabel!
     @IBOutlet weak var coinsLabel: UILabel!
-    @IBOutlet weak var difficultyLabel: UILabel!
     @IBOutlet weak var progressLabel: UILabel!
     
     var gameModelController: GameController!
@@ -21,7 +20,7 @@ class QuestionViewController: UIViewController {
     var currentCategory: Int! = -1
     var currentQuestion: Question!
     var currentQuestionNumber: Int = 0
-    var questionButtons = [UIButton]()
+    var answerButtons = [UIButton]()
     var score: Int = 0 {
         didSet {
             gameModelController.game.score = score
@@ -36,8 +35,6 @@ class QuestionViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
 
         setUpHeaderAndFooter()
-//        navigationController?.navigationBar.backgroundColor = UIColor.systemGreen
-//        navigationController?.navigationBar.layer.opacity = 0.17
     }
     
     override func viewDidLoad() {
@@ -61,41 +58,58 @@ class QuestionViewController: UIViewController {
 
     func loadQuestion() {
         clearAnswers()
-        questionLabel.text = String(htmlEncodedString: currentQuestion.question)
-        difficultyLabel.text = "Difficulty: \(currentQuestion.difficulty.capitalized)"
+        
+        // The question
+        questionLabel.text = String(htmlEncodedString: "\(currentQuestion.question)")
 
-        var height = 40
+        // The API sends the correct answer and all incorrect answers.  Combine them into a single array and shuffle.
         var answers: [String] = currentQuestion.incorrect_answers
         answers.append(currentQuestion.correct_answer)
         answers.shuffle()
-        var row = 0
         
-        for answer in answers {
-            let answerButton = UIButton(type: .system)
-            answerButton.translatesAutoresizingMaskIntoConstraints = false
-            answerButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-            answerButton.setTitle(String(htmlEncodedString: "This is the very super extremely long answer that should wrap \(answer)"), for: .normal)
+        // Save this to position next button. Buttons can vary in size,
+        // this just saves the previous bottom anchor wherever it winds up being.
+        var previousBottomAnchor = questionLabel.safeAreaLayoutGuide.bottomAnchor
 
+        // Cycle through answers, create buttons and position them, and add them to answers array
+        for answer in answers {
+            // Some initial configuration
+            var configuration = UIButton.Configuration.filled()
+            configuration.background.backgroundColor = UIColor(red: CGFloat(119/255.0), green: CGFloat(168/255.0), blue: CGFloat(179/255.0), alpha: CGFloat(1.0))
+            configuration.cornerStyle = .medium
+            
+            // New button for each answer
+            let answerButton = UIButton(configuration: configuration, primaryAction: nil)
+            // Some answers are long, need to word wrap
+            answerButton.sizeToFit()
+            // Config here
+            answerButton.translatesAutoresizingMaskIntoConstraints = false
+            
+            // Set and configure button title
+            answerButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+            let answerText = String(htmlEncodedString: answer)
+            answerButton.setTitle(answerText, for: .normal)
             answerButton.titleLabel?.numberOfLines = 0
             answerButton.titleLabel?.lineBreakMode = .byWordWrapping
             
-
+            // Run answerTapped() when tapped
             answerButton.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
-            answerButton.layer.borderWidth = 1
-            answerButton.layer.borderColor = UIColor.black.cgColor
 
+            // Append to answers array and add to view
             view.addSubview(answerButton)
-            questionButtons.append(answerButton)
+            answerButtons.append(answerButton)
             
+            // Anchors
             NSLayoutConstraint.activate([
                 answerButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
                 answerButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-                answerButton.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: CGFloat(height * row + 10)),
+                answerButton.topAnchor.constraint(equalTo: previousBottomAnchor, constant: 10),
             ])
-            
-            row += 1
+
+            // Save this to position next button. Buttons can vary in size,
+            // this just saves the previous bottom anchor wherever it winds up being.
+            previousBottomAnchor = answerButton.safeAreaLayoutGuide.bottomAnchor
         }
-        
     }
     
     @objc func answerTapped(_ sender: UIButton) {
@@ -151,7 +165,7 @@ class QuestionViewController: UIViewController {
     }
     
     func clearAnswers() {
-        for button in questionButtons {
+        for button in answerButtons {
             button.removeFromSuperview()
         }
     }
