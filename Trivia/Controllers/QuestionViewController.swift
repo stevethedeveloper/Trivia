@@ -21,6 +21,9 @@ class QuestionViewController: UIViewController {
     var currentQuestion: Question!
     var currentQuestionNumber: Int = 0
     var answerButtons = [UIButton]()
+    var correctAnswerCount = 0
+    var numberOfAnswersToRemove = 0
+    var buyButton = UIButton()
     var score: Int = 0 {
         didSet {
             gameModelController.game.score = score
@@ -28,12 +31,11 @@ class QuestionViewController: UIViewController {
             gameModelController.saveGameState()
         }
     }
-    var correctAnswerCount = 0
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-
+        
         setUpHeaderAndFooter()
     }
     
@@ -45,9 +47,11 @@ class QuestionViewController: UIViewController {
     }
 
     private func setUpHeaderAndFooter() {
+        // Update score and coin labels
         scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
         coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
 
+        // Update stars label and resize empty stars to match active stars
         let starsLabelText = gameModelController.starsText[gameModelController.game.stars]
         starsLabel.text = gameModelController.starsText[gameModelController.game.stars]
         let searchChar = "☆"
@@ -82,7 +86,7 @@ class QuestionViewController: UIViewController {
             let answerButton = UIButton(configuration: configuration, primaryAction: nil)
             // Some answers are long, need to word wrap
             answerButton.sizeToFit()
-            // Config here
+            // Config in code
             answerButton.translatesAutoresizingMaskIntoConstraints = false
             
             // Set and configure button title
@@ -103,13 +107,65 @@ class QuestionViewController: UIViewController {
             NSLayoutConstraint.activate([
                 answerButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
                 answerButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-                answerButton.topAnchor.constraint(equalTo: previousBottomAnchor, constant: 10),
+                answerButton.topAnchor.constraint(equalTo: previousBottomAnchor, constant: 20),
             ])
 
             // Save this to position next button. Buttons can vary in size,
             // this just saves the previous bottom anchor wherever it winds up being.
             previousBottomAnchor = answerButton.safeAreaLayoutGuide.bottomAnchor
         }
+        
+        // Add a button so they can buy help with question
+        if currentQuestion.type == "multiple" {
+            var configuration = UIButton.Configuration.filled()
+            configuration.background.backgroundColor = UIColor(red: CGFloat(255/255.0), green: CGFloat(0/255.0), blue: CGFloat(0/255.0), alpha: CGFloat(1.0))
+            configuration.cornerStyle = .medium
+            
+            // New button for help
+//            buyButton = UIButton(configuration: configuration, primaryAction: nil)
+            buyButton.configuration = configuration
+            buyButton.sizeToFit()
+            buyButton.translatesAutoresizingMaskIntoConstraints = false
+
+            buyButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+            buyButton.setTitle("🪙 Remove 2 incorrect answers for 2 coins!", for: .normal)
+            buyButton.titleLabel?.numberOfLines = 1
+            buyButton.addTarget(self, action: #selector(buyHelp), for: .touchUpInside)
+            view.addSubview(buyButton)
+
+            // Anchors
+            NSLayoutConstraint.activate([
+                buyButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+                buyButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+                buyButton.topAnchor.constraint(equalTo: previousBottomAnchor, constant: 40),
+            ])
+
+        }
+    }
+    
+    @objc func buyHelp() {
+        if gameModelController.game.coins < 2 {
+            let ac = UIAlertController(title: "Sorry!", message: "You don't have enough coins! Get more coins by completing categories." , preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(ac, animated: true)
+        } else {
+            let ac = UIAlertController(title: "Need help?", message: "You can remove two (2) incorrect answers for two (2) coins!" , preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: completeBuy))
+            ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(ac, animated: true)
+        }
+    }
+    
+    func completeBuy(action: UIAlertAction) {
+        numberOfAnswersToRemove = 2
+        for button in answerButtons where currentQuestion.correct_answer != button.titleLabel?.text ?? "" && numberOfAnswersToRemove > 0 {
+            button.isEnabled = false
+            button.configuration?.background.backgroundColor = .gray
+
+            numberOfAnswersToRemove -= 1
+        }
+        gameModelController.game.coins -= 2
+        coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
     }
     
     @objc func answerTapped(_ sender: UIButton) {
@@ -159,6 +215,7 @@ class QuestionViewController: UIViewController {
             navigationController?.popViewController(animated: true)
             return
         }
+        numberOfAnswersToRemove = 0
         currentQuestion = questions.popLast()
         currentQuestionNumber += 1
         loadQuestion()
@@ -168,5 +225,7 @@ class QuestionViewController: UIViewController {
         for button in answerButtons {
             button.removeFromSuperview()
         }
+        answerButtons.removeAll()
+        buyButton.removeFromSuperview()
     }
 }
