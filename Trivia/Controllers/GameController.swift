@@ -40,7 +40,7 @@ final class GameController {
         
         
         
-//        getToken()
+        getToken()
     }
     
     // Load game state from user defaults

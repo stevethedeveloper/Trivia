@@ -61,15 +61,17 @@ class QuestionViewController: UIViewController {
     }
 
     func loadQuestion() {
-        clearAnswers()
-        
         // The question
         questionLabel.text = String(htmlEncodedString: "\(currentQuestion.question)")
+        
+        loadAnswers()
+    }
 
+    func loadAnswers() {
+        clearAnswers()
         // The API sends the correct answer and all incorrect answers.  Combine them into a single array and shuffle.
-        var answers: [String] = currentQuestion.incorrect_answers
-        answers.append(currentQuestion.correct_answer)
-        answers.shuffle()
+
+        let answers: [String] = getAnswersArray()
         
         // Save this to position next button. Buttons can vary in size,
         // this just saves the previous bottom anchor wherever it winds up being.
@@ -143,6 +145,14 @@ class QuestionViewController: UIViewController {
         }
     }
     
+    func getAnswersArray() -> [String] {
+        var answers: [String] = currentQuestion.incorrect_answers
+        answers.append(currentQuestion.correct_answer)
+        answers.shuffle()
+        
+        return answers
+    }
+    
     @objc func buyHelp() {
         if gameModelController.game.coins < 2 {
             let ac = UIAlertController(title: "Sorry!", message: "You don't have enough coins! Get more coins by completing categories." , preferredStyle: .alert)
@@ -173,7 +183,9 @@ class QuestionViewController: UIViewController {
         var result: String!
         var correctAnswer: String!
         
-        if selectedAnswer == String(htmlEncodedString: currentQuestion.correct_answer) {
+        let isCorrect = checkAnswer(submittedAnswer: selectedAnswer, expectedAnswer: String(htmlEncodedString: currentQuestion.correct_answer) ?? "")
+        
+        if isCorrect {
             score += DifficultyPoints(rawValue: currentQuestion.difficulty)?.pointsValue ?? 0
             result = "Correct!"
             correctAnswer = ""
@@ -199,6 +211,10 @@ class QuestionViewController: UIViewController {
         let ac = UIAlertController(title: result, message: correctAnswer, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: continueRound))
         present(ac, animated: true)
+    }
+    
+    func checkAnswer(submittedAnswer: String, expectedAnswer: String) -> Bool {
+        return submittedAnswer == expectedAnswer
     }
 
     func continueRound(action: UIAlertAction) {
