@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA5D440C291F1EBF008FFF30 /* ViewHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5D440B291F1EBF008FFF30 /* ViewHelpers.swift */; };
 		AA66EEEC28F0BCF00064C40B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA66EEEB28F0BCF00064C40B /* AppDelegate.swift */; };
 		AA66EEEE28F0BCF00064C40B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA66EEED28F0BCF00064C40B /* SceneDelegate.swift */; };
 		AA66EEF028F0BCF00064C40B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA66EEEF28F0BCF00064C40B /* ViewController.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA5D440B291F1EBF008FFF30 /* ViewHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHelpers.swift; sourceTree = "<group>"; };
 		AA66EEE828F0BCF00064C40B /* Trivia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trivia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA66EEEB28F0BCF00064C40B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA66EEED28F0BCF00064C40B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				AA66EF2D28F0F3DF0064C40B /* Extensions.swift */,
+				AA5D440B291F1EBF008FFF30 /* ViewHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				AA8215C328FE031A00F30BCE /* CategoryCell.swift in Sources */,
 				AA66EF2128F0BEE80064C40B /* QuestionViewController.swift in Sources */,
 				AA8215C628FE231F00F30BCE /* Categories.swift in Sources */,
+				AA5D440C291F1EBF008FFF30 /* ViewHelpers.swift in Sources */,
 				AA66EEEC28F0BCF00064C40B /* AppDelegate.swift in Sources */,
 				AA66EF2E28F0F3DF0064C40B /* Extensions.swift in Sources */,
 				AA66EF2728F0D0700064C40B /* Questions.swift in Sources */,

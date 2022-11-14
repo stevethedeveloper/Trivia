@@ -19,32 +19,14 @@ final class GameController {
         categories: [Category]()
     )
     
-    let starsText = [
-        0: "☆ ☆ ☆ ☆ ☆",
-        1: "⭐️ ☆ ☆ ☆ ☆",
-        2: "⭐️ ⭐️ ☆ ☆ ☆",
-        3: "⭐️ ⭐️ ⭐️ ☆ ☆",
-        4: "⭐️ ⭐️ ⭐️ ⭐️ ☆",
-        5: "⭐️ ⭐️ ⭐️ ⭐️ ⭐️"
-    ]
-    
     init() {
         // Take care of first setup.  Get token, load the game state, and list of categories
         loadGameState()
-
-        
-        
-        
-        
-        
-        
-        
-        
         getToken()
     }
     
     // Load game state from user defaults
-    func loadGameState() {
+    private func loadGameState() {
         if let data = UserDefaults.standard.object(forKey: "game") as? Data,
            let game = try? JSONDecoder().decode(Game.self, from: data) {
             self.game = game
@@ -73,8 +55,8 @@ final class GameController {
         saveGameState()
     }
 
-    // This is called on init, but also can be called elsewhere if a new token is needed
-    func getToken() {
+    // This is called on init on game start, and prevents questions from being repeated in current session
+    private func getToken() {
         // get new token
         let urlString: String
         urlString = "https://opentdb.com/api_token.php?command=request"
@@ -113,7 +95,7 @@ final class GameController {
     }
 
     // Load categories from JSON file
-    func loadCategoriesFromJSON() -> [Category]? {
+    private func loadCategoriesFromJSON() -> [Category]? {
         if let url = Bundle.main.url(forResource: "categories", withExtension: "json") {
             do {
                 let data = try Data(contentsOf: url)

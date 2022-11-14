@@ -7,18 +7,20 @@
 
 import UIKit
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class ViewController: UIViewController {
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var coinsLabel: UILabel!
     @IBOutlet weak var starsLabel: UILabel!
     @IBOutlet weak var levelLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var questions = [Question]()
+    // Inject current game
     var gameModelController: GameController!
-    var categories = [Category]()
-    var emojiFontSize = 0.0
-    
+
+    private var questions = [Question]()
+    private var emojiFontSize = 0.0
+    private var categories = [Category]()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -28,28 +30,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         // Any time we return, update the game state
         gameModelController.saveGameState()
         
-        // Always get a fresh view
-        if gameModelController.game.stars < 5 {
-            collectionView.reloadData()
-        } else {
-            // Move to next level
-            loadNextLevel()
-        }
+        // Load categories
+        categories = gameModelController.game.categories
         
+        // Always get a fresh view, or load new level
+        refreshDisplay()
     }
-    
-    private func setUpHeaderAndFooter() {
-        scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
-        coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
-        levelLabel.text = "Level \(gameModelController.game.currentLevel)"
         
-        let starsLabelText = gameModelController.starsText[gameModelController.game.stars]
-        let searchChar = "☆"
-        let starsLabelAttributedText = NSMutableAttributedString(string: starsLabelText ?? "")
-        starsLabelAttributedText.attributeRangeFor(searchString: searchChar, attributeValue: UIFont(name: starsLabel.font.fontName, size: 17.0)!, attributeType: .Size, attributeSearchType: .All)
-        starsLabel.attributedText = starsLabelAttributedText
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
@@ -61,14 +48,40 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         collectionView.delegate = self
         collectionView.dataSource = self
     }
+
+    // Detect orientation change to force redraw
+    public override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        if UIDevice.current.orientation.isLandscape || UIDevice.current.orientation.isPortrait, let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.invalidateLayout()
+            collectionView.reloadData()
+        }
+    }
+
+    // Refresh view or load new level
+    private func refreshDisplay() {
+        if gameModelController.game.stars < 5 {
+            collectionView.reloadData()
+        } else {
+            // Move to next level
+            loadNextLevel()
+        }
+    }
     
-    func loadNextLevel() {
+    private func setUpHeaderAndFooter() {
+        scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
+        coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
+        levelLabel.text = "Level \(gameModelController.game.currentLevel)"
+        // In ViewHelpers
+        starsLabel.attributedText = getStarsAttributedText(numberOfStars: gameModelController.game.stars, font: UIFont(name: starsLabel.font.fontName, size: 17.0)!)
+    }
+
+    private func loadNextLevel() {
         gameModelController.loadNewLevel()
         collectionView.reloadData()
         setUpHeaderAndFooter()
     }
     
-    func parse(json: Data) {
+    private func parse(json: Data) {
         let decoder = JSONDecoder()
         
         if let jsonQuestions = try? decoder.decode(Questions.self, from: json) {
@@ -76,7 +89,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    func loadRound(forCategory category: Int) {
+    private func loadRound(forCategory category: Int) {
         DispatchQueue.main.async { [weak self] in
             if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
                 vc.currentCategory = category
@@ -87,22 +100,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    func showError() {
+    private func showError() {
         DispatchQueue.main.async { [weak self] in
-            let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading question; please check your connection and try again.", preferredStyle: .alert)
+            let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading the question; please check your connection and try again.", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "OK", style: .default))
             self?.present(ac, animated: true)
         }
     }
-    
-    // Detect orientation change to force redraw
-    public override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        if UIDevice.current.orientation.isLandscape || UIDevice.current.orientation.isPortrait, let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.invalidateLayout()
-            collectionView.reloadData()
-        }
-    }
-    
+}
+
+// MARK: - UIViewController delegate
+extension ViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         // Want a square, only need width
@@ -134,7 +142,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             self?.showError()
         }
     }
-    
+}
+
+// MARK: - UIViewController data source
+extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categories.count
     }

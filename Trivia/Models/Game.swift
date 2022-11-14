@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Game: Codable {
     var score: Int
@@ -21,4 +22,21 @@ enum Levels: String {
     case easy
     case medium
     case hard
+}
+
+enum StarsText: String, CaseIterable {
+    case zero, one, two, three, four, five
+
+    var asString : String {
+      switch self {
+      // Use Internationalization, as appropriate.
+      case .zero: return "☆ ☆ ☆ ☆ ☆"
+      case .one: return "⭐️ ☆ ☆ ☆ ☆"
+      case .two: return "⭐️ ⭐️ ☆ ☆ ☆"
+      case .three: return "⭐️ ⭐️ ⭐️ ☆ ☆"
+      case .four: return "⭐️ ⭐️ ⭐️ ⭐️ ☆"
+      case .five: return "⭐️ ⭐️ ⭐️ ⭐️ ⭐️"
+
+      }
+    }
 }

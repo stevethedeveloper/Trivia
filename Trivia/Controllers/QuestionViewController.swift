@@ -18,13 +18,14 @@ class QuestionViewController: UIViewController {
     var gameModelController: GameController!
     var questions: [Question]!
     var currentCategory: Int! = -1
-    var currentQuestion: Question!
-    var currentQuestionNumber: Int = 0
-    var answerButtons = [UIButton]()
-    var correctAnswerCount = 0
-    var numberOfAnswersToRemove = 0
-    var buyButton = UIButton()
-    var score: Int = 0 {
+    
+    private var currentQuestion: Question!
+    private var currentQuestionNumber: Int = 0
+    private var answerButtons = [UIButton]()
+    private var correctAnswerCount = 0
+    private var numberOfAnswersToRemove = 0
+    private var buyButton = UIButton()
+    private var score: Int = 0 {
         didSet {
             gameModelController.game.score = score
             scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
@@ -50,25 +51,20 @@ class QuestionViewController: UIViewController {
         // Update score and coin labels
         scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
         coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
-
-        // Update stars label and resize empty stars to match active stars
-        let starsLabelText = gameModelController.starsText[gameModelController.game.stars]
-        starsLabel.text = gameModelController.starsText[gameModelController.game.stars]
-        let searchChar = "☆"
-        let starsLabelAttributedText = NSMutableAttributedString(string: starsLabelText ?? "")
-        starsLabelAttributedText.attributeRangeFor(searchString: searchChar, attributeValue: UIFont(name: starsLabel.font.fontName, size: 17.0)!, attributeType: .Size, attributeSearchType: .All)
-        starsLabel.attributedText = starsLabelAttributedText
+        // In ViewHelpers
+        starsLabel.attributedText = getStarsAttributedText(numberOfStars: gameModelController.game.stars, font: UIFont(name: starsLabel.font.fontName, size: 17.0)!)
     }
 
-    func loadQuestion() {
+    private func loadQuestion() {
         // The question
         questionLabel.text = String(htmlEncodedString: "\(currentQuestion.question)")
         
         loadAnswers()
     }
 
-    func loadAnswers() {
+    private func loadAnswers() {
         clearAnswers()
+        
         // The API sends the correct answer and all incorrect answers.  Combine them into a single array and shuffle.
 
         let answers: [String] = getAnswersArray()
@@ -145,7 +141,7 @@ class QuestionViewController: UIViewController {
         }
     }
     
-    func getAnswersArray() -> [String] {
+    private func getAnswersArray() -> [String] {
         var answers: [String] = currentQuestion.incorrect_answers
         answers.append(currentQuestion.correct_answer)
         answers.shuffle()
@@ -153,7 +149,7 @@ class QuestionViewController: UIViewController {
         return answers
     }
     
-    @objc func buyHelp() {
+    @objc private func buyHelp() {
         if gameModelController.game.coins < 2 {
             let ac = UIAlertController(title: "Sorry!", message: "You don't have enough coins! Get more coins by completing categories." , preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -166,7 +162,7 @@ class QuestionViewController: UIViewController {
         }
     }
     
-    func completeBuy(action: UIAlertAction) {
+    private func completeBuy(action: UIAlertAction) {
         numberOfAnswersToRemove = 2
         for button in answerButtons where currentQuestion.correct_answer != button.titleLabel?.text ?? "" && numberOfAnswersToRemove > 0 {
             button.isEnabled = false
@@ -178,7 +174,7 @@ class QuestionViewController: UIViewController {
         coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
     }
     
-    @objc func answerTapped(_ sender: UIButton) {
+    @objc private func answerTapped(_ sender: UIButton) {
         guard let selectedAnswer = sender.titleLabel?.text else { return }
         var result: String!
         var correctAnswer: String!
@@ -213,15 +209,15 @@ class QuestionViewController: UIViewController {
         present(ac, animated: true)
     }
     
-    func checkAnswer(submittedAnswer: String, expectedAnswer: String) -> Bool {
+    private func checkAnswer(submittedAnswer: String, expectedAnswer: String) -> Bool {
         return submittedAnswer == expectedAnswer
     }
 
-    func continueRound(action: UIAlertAction) {
+    private func continueRound(action: UIAlertAction) {
         nextQuestion()
     }
     
-    func nextQuestion() {
+    private func nextQuestion() {
         guard questions.count > 0 else {
             if correctAnswerCount >= 3 {
                 gameModelController.game.categoriesCleared.append(gameModelController.game.categories[currentCategory])
@@ -237,7 +233,7 @@ class QuestionViewController: UIViewController {
         loadQuestion()
     }
     
-    func clearAnswers() {
+    private func clearAnswers() {
         for button in answerButtons {
             button.removeFromSuperview()
         }
