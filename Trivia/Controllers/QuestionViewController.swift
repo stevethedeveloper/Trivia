@@ -38,8 +38,17 @@ class QuestionViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
 
         loadQuestions(forCategory: currentCategory)
+        
+        removeLoadingView()
 
         setUpHeaderAndFooter()
+    }
+    
+    func removeLoadingView() {
+        guard let navigationController = self.navigationController else { return }
+        var navigationArray = navigationController.viewControllers // To get all UIViewController stack as Array
+        navigationArray.remove(at: navigationArray.count - 2) // To remove previous UIViewController
+        self.navigationController?.viewControllers = navigationArray
     }
     
     override func viewDidLoad() {

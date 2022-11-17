@@ -127,6 +127,10 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDelegateFlow
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let categoryId = categories[indexPath.row].id
         
+        if let loadingVC = storyboard?.instantiateViewController(withIdentifier: "Loading") as? LoadingViewController {
+            navigationController?.pushViewController(loadingVC, animated: false)
+        }
+            
         DispatchQueue.main.async { [weak self] in
             if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
 //                vc.questions = self?.questions
