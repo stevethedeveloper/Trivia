@@ -16,8 +16,8 @@ class QuestionViewController: UIViewController {
     @IBOutlet weak var progressLabel: UILabel!
     
     var gameModelController: GameController!
-    var questions: [Question]!
     var currentCategory: Int! = -1
+    var questions = [Question]()
     
     private var currentQuestion: Question!
     private var currentQuestionNumber: Int = 0
@@ -36,7 +36,9 @@ class QuestionViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-        
+
+        loadQuestions(forCategory: currentCategory)
+
         setUpHeaderAndFooter()
     }
     
@@ -44,7 +46,8 @@ class QuestionViewController: UIViewController {
         super.viewDidLoad()
         progressLabel.text = ""
         score = gameModelController.game.score
-        nextQuestion()
+                
+//        nextQuestion()
     }
 
     private func setUpHeaderAndFooter() {
@@ -53,6 +56,32 @@ class QuestionViewController: UIViewController {
         coinsLabel.text = "🪙 x\(gameModelController.game.coins.withCommas())"
         // In ViewHelpers
         starsLabel.attributedText = getStarsAttributedText(numberOfStars: gameModelController.game.stars, font: UIFont(name: starsLabel.font.fontName, size: 17.0)!)
+    }
+    
+    private func loadQuestions(forCategory category: Int) {
+        var urlString: String
+
+        urlString = "https://opentdb.com/api.php?category=\(category)&amount=5&difficulty=\(gameModelController.getCurrentLevelDifficulty())&token=\(gameModelController.game.token)"
+        
+        DispatchQueue.global(qos: .userInitiated).sync { [weak self] in
+            if let url = URL(string: urlString) {
+                if let data = try? Data(contentsOf: url) {
+                    self?.parse(json: data)
+                    self?.nextQuestion()
+//                    self?.loadRound(forCategory: category)
+                    return
+                }
+            }
+//            self?.showError()
+        }
+    }
+
+    private func parse(json: Data) {
+        let decoder = JSONDecoder()
+        
+        if let jsonQuestions = try? decoder.decode(Questions.self, from: json) {
+            questions = jsonQuestions.results
+        }
     }
 
     private func loadQuestion() {
@@ -220,7 +249,10 @@ class QuestionViewController: UIViewController {
     private func nextQuestion() {
         guard questions.count > 0 else {
             if correctAnswerCount >= 3 {
-                gameModelController.game.categoriesCleared.append(gameModelController.game.categories[currentCategory])
+                guard let index = gameModelController.game.categories.firstIndex(where: {$0.id == currentCategory}) else {
+                    return
+                }
+                gameModelController.game.categoriesCleared.append(gameModelController.game.categories[index])
                 gameModelController.game.stars += 1
                 gameModelController.game.coins += 1
             }

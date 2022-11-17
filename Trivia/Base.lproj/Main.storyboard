@@ -270,6 +270,33 @@
             </objects>
             <point key="canvasLocation" x="1882.608695652174" y="115.84821428571428"/>
         </scene>
+        <!--Loading View Controller-->
+        <scene sceneID="hGT-ad-jOi">
+            <objects>
+                <viewController storyboardIdentifier="Loading" id="xRd-HU-Cf4" customClass="LoadingViewController" customModule="Trivia" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KI5-wJ-DBO">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtb-7l-sps">
+                                <rect key="frame" x="176.5" y="437.5" width="61" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="57u-X1-CEQ"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Xtb-7l-sps" firstAttribute="centerY" secondItem="KI5-wJ-DBO" secondAttribute="centerY" id="OEY-Ke-Y0Q"/>
+                            <constraint firstItem="Xtb-7l-sps" firstAttribute="centerX" secondItem="KI5-wJ-DBO" secondAttribute="centerX" id="ao9-O9-nJP"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L2X-5u-fKj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2834" y="69"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="L1D-m5-mKw">
             <objects>

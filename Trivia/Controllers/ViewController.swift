@@ -89,24 +89,24 @@ class ViewController: UIViewController {
         }
     }
     
-    private func loadRound(forCategory category: Int) {
-        DispatchQueue.main.async { [weak self] in
-            if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
-                vc.currentCategory = category
-                vc.questions = self?.questions
-                vc.gameModelController = self?.gameModelController
-                self?.navigationController?.pushViewController(vc, animated: true)
-            }
-        }
-    }
-    
-    private func showError() {
-        DispatchQueue.main.async { [weak self] in
-            let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading the question; please check your connection and try again.", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            self?.present(ac, animated: true)
-        }
-    }
+//    private func loadRound(forCategory category: Int) {
+//        DispatchQueue.main.async { [weak self] in
+//            if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
+//                vc.currentCategory = category
+//                vc.questions = self?.questions
+//                vc.gameModelController = self?.gameModelController
+//                self?.navigationController?.pushViewController(vc, animated: true)
+//            }
+//        }
+//    }
+//
+//    private func showError() {
+//        DispatchQueue.main.async { [weak self] in
+//            let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading the question; please check your connection and try again.", preferredStyle: .alert)
+//            ac.addAction(UIAlertAction(title: "OK", style: .default))
+//            self?.present(ac, animated: true)
+//        }
+//    }
 }
 
 // MARK: - UIViewController delegate
@@ -127,19 +127,13 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDelegateFlow
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let categoryId = categories[indexPath.row].id
         
-        let urlString: String
-        
-        urlString = "https://opentdb.com/api.php?category=\(categoryId)&amount=5&difficulty=\(gameModelController.getCurrentLevelDifficulty())&token=\(gameModelController.game.token)"
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            if let url = URL(string: urlString) {
-                if let data = try? Data(contentsOf: url) {
-                    self?.parse(json: data)
-                    self?.loadRound(forCategory: indexPath.row)
-                    return
-                }
+        DispatchQueue.main.async { [weak self] in
+            if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
+//                vc.questions = self?.questions
+                vc.gameModelController = self?.gameModelController
+                vc.currentCategory = categoryId
+                self?.navigationController?.pushViewController(vc, animated: true)
             }
-            self?.showError()
         }
     }
 }
