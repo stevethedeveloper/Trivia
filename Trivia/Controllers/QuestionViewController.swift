@@ -16,7 +16,7 @@ class QuestionViewController: UIViewController {
     @IBOutlet weak var progressLabel: UILabel!
     
     var gameModelController: GameController!
-    var currentCategory: Int! = -1
+    var currentCategory: Category!
     var questions = [Question]()
     
     private var currentQuestion: Question!
@@ -32,31 +32,33 @@ class QuestionViewController: UIViewController {
             gameModelController.saveGameState()
         }
     }
+    private let loaderView = RoundLoaderViewController()
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
 
-        loadQuestions(forCategory: currentCategory)
+//        createLoaderView()
         
-        removeLoadingView()
-
+        loadQuestions(forCategory: currentCategory.id)
+                
         setUpHeaderAndFooter()
     }
     
-    func removeLoadingView() {
-        guard let navigationController = self.navigationController else { return }
-        var navigationArray = navigationController.viewControllers // To get all UIViewController stack as Array
-        navigationArray.remove(at: navigationArray.count - 2) // To remove previous UIViewController
-        self.navigationController?.viewControllers = navigationArray
+    func createLoaderView() {
+        loaderView.text = currentCategory.image
+        // add the loader view view controller
+        addChild(loaderView)
+        loaderView.view.frame = view.frame
+        view.addSubview(loaderView.view)
+        loaderView.didMove(toParent: self)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         progressLabel.text = ""
         score = gameModelController.game.score
-                
-//        nextQuestion()
     }
 
     private func setUpHeaderAndFooter() {
@@ -67,30 +69,56 @@ class QuestionViewController: UIViewController {
         starsLabel.attributedText = getStarsAttributedText(numberOfStars: gameModelController.game.stars, font: UIFont(name: starsLabel.font.fontName, size: 17.0)!)
     }
     
+    func newToken(reloadQuestions: Bool = true) {
+        gameModelController.getToken()
+        loadQuestions(forCategory: currentCategory.id)
+    }
+
     private func loadQuestions(forCategory category: Int) {
+        createLoaderView()
+        
         var urlString: String
 
         urlString = "https://opentdb.com/api.php?category=\(category)&amount=5&difficulty=\(gameModelController.getCurrentLevelDifficulty())&token=\(gameModelController.game.token)"
         
+//        DispatchQueue.main.async() {
+//            self.loaderView.willMove(toParent: nil)
+//        }
+
         DispatchQueue.global(qos: .userInitiated).sync { [weak self] in
             if let url = URL(string: urlString) {
                 if let data = try? Data(contentsOf: url) {
-                    self?.parse(json: data)
-                    self?.nextQuestion()
-//                    self?.loadRound(forCategory: category)
-                    return
+                    if self?.parse(json: data) == true {
+                        self?.nextQuestion()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self?.loaderView.view.removeFromSuperview()
+                            self?.loaderView.removeFromParent()
+                        }
+                        return
+                    } else {
+                        print("a")
+                        newToken()
+                        return
+                    }
                 }
             }
-//            self?.showError()
         }
     }
 
-    private func parse(json: Data) {
+    private func parse(json: Data) -> Bool {
         let decoder = JSONDecoder()
         
         if let jsonQuestions = try? decoder.decode(Questions.self, from: json) {
             questions = jsonQuestions.results
+            if jsonQuestions.response_code == 3 || jsonQuestions.response_code == 4 {
+                // bad token
+                return false
+            }
+            gameModelController.game.response_code = jsonQuestions.response_code
         }
+        
+        return true
+        
     }
 
     private func loadQuestion() {
@@ -104,7 +132,6 @@ class QuestionViewController: UIViewController {
         clearAnswers()
         
         // The API sends the correct answer and all incorrect answers.  Combine them into a single array and shuffle.
-
         let answers: [String] = getAnswersArray()
         
         // Save this to position next button. Buttons can vary in size,
@@ -137,6 +164,8 @@ class QuestionViewController: UIViewController {
 
             // Append to answers array and add to view
             view.addSubview(answerButton)
+            answerButton.layer.zPosition = -1
+
             answerButtons.append(answerButton)
             
             // Anchors
@@ -158,7 +187,6 @@ class QuestionViewController: UIViewController {
             configuration.cornerStyle = .medium
             
             // New button for help
-//            buyButton = UIButton(configuration: configuration, primaryAction: nil)
             buyButton.configuration = configuration
             buyButton.sizeToFit()
             buyButton.translatesAutoresizingMaskIntoConstraints = false
@@ -168,14 +196,14 @@ class QuestionViewController: UIViewController {
             buyButton.titleLabel?.numberOfLines = 1
             buyButton.addTarget(self, action: #selector(buyHelp), for: .touchUpInside)
             view.addSubview(buyButton)
+            buyButton.layer.zPosition = -1
 
             // Anchors
             NSLayoutConstraint.activate([
                 buyButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
                 buyButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-                buyButton.topAnchor.constraint(equalTo: previousBottomAnchor, constant: 40),
+                buyButton.topAnchor.constraint(equalTo: previousBottomAnchor, constant: 40)
             ])
-
         }
     }
     
@@ -258,7 +286,7 @@ class QuestionViewController: UIViewController {
     private func nextQuestion() {
         guard questions.count > 0 else {
             if correctAnswerCount >= 3 {
-                guard let index = gameModelController.game.categories.firstIndex(where: {$0.id == currentCategory}) else {
+                guard let index = gameModelController.game.categories.firstIndex(where: {$0.id == currentCategory.id}) else {
                     return
                 }
                 gameModelController.game.categoriesCleared.append(gameModelController.game.categories[index])

@@ -88,25 +88,6 @@ class ViewController: UIViewController {
             questions = jsonQuestions.results
         }
     }
-    
-//    private func loadRound(forCategory category: Int) {
-//        DispatchQueue.main.async { [weak self] in
-//            if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
-//                vc.currentCategory = category
-//                vc.questions = self?.questions
-//                vc.gameModelController = self?.gameModelController
-//                self?.navigationController?.pushViewController(vc, animated: true)
-//            }
-//        }
-//    }
-//
-//    private func showError() {
-//        DispatchQueue.main.async { [weak self] in
-//            let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading the question; please check your connection and try again.", preferredStyle: .alert)
-//            ac.addAction(UIAlertAction(title: "OK", style: .default))
-//            self?.present(ac, animated: true)
-//        }
-//    }
 }
 
 // MARK: - UIViewController delegate
@@ -125,17 +106,12 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDelegateFlow
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let categoryId = categories[indexPath.row].id
-        
-        if let loadingVC = storyboard?.instantiateViewController(withIdentifier: "Loading") as? LoadingViewController {
-            navigationController?.pushViewController(loadingVC, animated: false)
-        }
-            
+        let category = categories[indexPath.row]
+                    
         DispatchQueue.main.async { [weak self] in
             if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
-//                vc.questions = self?.questions
                 vc.gameModelController = self?.gameModelController
-                vc.currentCategory = categoryId
+                vc.currentCategory = category
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
         }
@@ -160,7 +136,7 @@ extension ViewController: UICollectionViewDataSource {
         } else {
             cell.isUserInteractionEnabled = true
             cell.lockView.isHidden = true
-            cell.layer.borderColor = UIColor.systemGreen.cgColor
+            cell.layer.borderColor = UIColor.systemPurple.cgColor
             cell.layer.backgroundColor = UIColor.white.cgColor
         }
         

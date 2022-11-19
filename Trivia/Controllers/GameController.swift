@@ -16,7 +16,8 @@ final class GameController {
         categoriesCleared: [Category](),
         coins: 0,
         stars: 0,
-        categories: [Category]()
+        categories: [Category](),
+        response_code: 0
     )
     
     init() {
@@ -54,9 +55,9 @@ final class GameController {
 
         saveGameState()
     }
-
+    
     // This is called on init on game start, and prevents questions from being repeated in current session
-    private func getToken() {
+    func getToken() {
         // get new token
         let urlString: String
         urlString = "https://opentdb.com/api_token.php?command=request"
@@ -90,7 +91,7 @@ final class GameController {
         case 6...15:
             return "medium"
         default:
-            return "hard"
+            return "all"
         }
     }
 

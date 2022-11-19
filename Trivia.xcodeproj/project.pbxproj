@@ -28,7 +28,7 @@
 		AA8215CC28FE2C1E00F30BCE /* categories.json in Resources */ = {isa = PBXBuildFile; fileRef = AA8215CB28FE2C1E00F30BCE /* categories.json */; };
 		AA92ED9028F634EC00E91681 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92ED8F28F634EC00E91681 /* Game.swift */; };
 		AA92ED9228F635AC00E91681 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92ED9128F635AC00E91681 /* GameController.swift */; };
-		AACD11CD2925C8EE006817DD /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACD11CC2925C8EE006817DD /* LoadingViewController.swift */; };
+		AACD11CF29272F2E006817DD /* RoundLoaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACD11CE29272F2E006817DD /* RoundLoaderViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,7 +74,7 @@
 		AA8215CB28FE2C1E00F30BCE /* categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = categories.json; sourceTree = "<group>"; };
 		AA92ED8F28F634EC00E91681 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		AA92ED9128F635AC00E91681 /* GameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
-		AACD11CC2925C8EE006817DD /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		AACD11CE29272F2E006817DD /* RoundLoaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundLoaderViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,7 +164,7 @@
 				AA66EF2028F0BEE80064C40B /* QuestionViewController.swift */,
 				AA92ED9128F635AC00E91681 /* GameController.swift */,
 				AA8215C228FE031A00F30BCE /* CategoryCell.swift */,
-				AACD11CC2925C8EE006817DD /* LoadingViewController.swift */,
+				AACD11CE29272F2E006817DD /* RoundLoaderViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -324,9 +324,9 @@
 			files = (
 				AA66EEF028F0BCF00064C40B /* ViewController.swift in Sources */,
 				AA92ED9228F635AC00E91681 /* GameController.swift in Sources */,
-				AACD11CD2925C8EE006817DD /* LoadingViewController.swift in Sources */,
 				AA92ED9028F634EC00E91681 /* Game.swift in Sources */,
 				AA8215C328FE031A00F30BCE /* CategoryCell.swift in Sources */,
+				AACD11CF29272F2E006817DD /* RoundLoaderViewController.swift in Sources */,
 				AA66EF2128F0BEE80064C40B /* QuestionViewController.swift in Sources */,
 				AA8215C628FE231F00F30BCE /* Categories.swift in Sources */,
 				AA5D440C291F1EBF008FFF30 /* ViewHelpers.swift in Sources */,
