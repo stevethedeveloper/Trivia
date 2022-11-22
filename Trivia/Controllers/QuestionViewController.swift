@@ -23,8 +23,11 @@ class QuestionViewController: UIViewController {
     private var currentQuestionNumber: Int = 0
     private var answerButtons = [UIButton]()
     private var correctAnswerCount = 0
+    // For the "buy" functionality
     private var numberOfAnswersToRemove = 0
     private var buyButton = UIButton()
+    
+    // Update the score label and save the state
     private var score: Int = 0 {
         didSet {
             gameModelController.game.score = score
@@ -32,29 +35,19 @@ class QuestionViewController: UIViewController {
             gameModelController.saveGameState()
         }
     }
+    
+    // Loading view
     private let loaderView = RoundLoaderViewController()
 
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
 
-//        createLoaderView()
-        
         loadQuestions(forCategory: currentCategory.id)
                 
         setUpHeaderAndFooter()
     }
-    
-    func createLoaderView() {
-        loaderView.text = currentCategory.image
-        // add the loader view view controller
-        addChild(loaderView)
-        loaderView.view.frame = view.frame
-        view.addSubview(loaderView.view)
-        loaderView.didMove(toParent: self)
-    }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         progressLabel.text = ""
@@ -69,34 +62,42 @@ class QuestionViewController: UIViewController {
         starsLabel.attributedText = getStarsAttributedText(numberOfStars: gameModelController.game.stars, font: UIFont(name: starsLabel.font.fontName, size: 17.0)!)
     }
     
-    func newToken(reloadQuestions: Bool = true) {
+    private func createLoaderView() {
+        loaderView.text = currentCategory.image
+        // add the loader view view controller
+        addChild(loaderView)
+        loaderView.view.frame = view.frame
+        view.addSubview(loaderView.view)
+        loaderView.didMove(toParent: self)
+    }
+
+    private func newToken(reloadQuestions: Bool = true) {
         gameModelController.getToken()
         loadQuestions(forCategory: currentCategory.id)
     }
 
     private func loadQuestions(forCategory category: Int) {
+        // Show loading screen
         createLoaderView()
         
         var urlString: String
 
         urlString = "https://opentdb.com/api.php?category=\(category)&amount=5&difficulty=\(gameModelController.getCurrentLevelDifficulty())&token=\(gameModelController.game.token)"
         
-//        DispatchQueue.main.async() {
-//            self.loaderView.willMove(toParent: nil)
-//        }
-
         DispatchQueue.global(qos: .userInitiated).sync { [weak self] in
             if let url = URL(string: urlString) {
                 if let data = try? Data(contentsOf: url) {
                     if self?.parse(json: data) == true {
                         self?.nextQuestion()
+                        // Hide loader view
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             self?.loaderView.view.removeFromSuperview()
                             self?.loaderView.removeFromParent()
                         }
                         return
                     } else {
-                        print("a")
+                        // If no results are returned, get a new token, the newToken method will
+                        // repeat the call to this function
                         newToken()
                         return
                     }
@@ -118,7 +119,6 @@ class QuestionViewController: UIViewController {
         }
         
         return true
-        
     }
 
     private func loadQuestion() {
@@ -128,6 +128,11 @@ class QuestionViewController: UIViewController {
         loadAnswers()
     }
 
+    /*
+     This method sets up the answer buttons in code. There are two types of questions: mutliple choice and true/false.
+     Multiple choice also gets the "buy" button to allow them to trade coins for narrowing the answers.
+     True/false does not get a "buy" button, because that would reveal the answer.
+     */
     private func loadAnswers() {
         clearAnswers()
         
@@ -186,7 +191,6 @@ class QuestionViewController: UIViewController {
             configuration.background.backgroundColor = UIColor(red: CGFloat(255/255.0), green: CGFloat(0/255.0), blue: CGFloat(0/255.0), alpha: CGFloat(1.0))
             configuration.cornerStyle = .medium
             
-            // New button for help
             buyButton.configuration = configuration
             buyButton.sizeToFit()
             buyButton.translatesAutoresizingMaskIntoConstraints = false

@@ -45,6 +45,7 @@ final class GameController {
         }
     }
 
+    // Clear out the current level and start new level
     func loadNewLevel() {
         game.currentLevel += 1
         game.stars = 0
@@ -53,10 +54,12 @@ final class GameController {
         let allCategories = loadCategoriesFromJSON() ?? []
         game.categories = Array(allCategories.prefix(8)).shuffled()
 
+        // Save the game state at the new level
         saveGameState()
     }
     
     // This is called on init on game start, and prevents questions from being repeated in current session
+    // It can also be called from other classes when a new token is needed
     func getToken() {
         // get new token
         let urlString: String
@@ -84,6 +87,7 @@ final class GameController {
         }
     }
     
+    // Increase difficulty level
     func getCurrentLevelDifficulty() -> String {
         switch game.currentLevel {
         case 1...5:
@@ -91,7 +95,7 @@ final class GameController {
         case 6...15:
             return "medium"
         default:
-            return "all"
+            return "hard"
         }
     }
 
