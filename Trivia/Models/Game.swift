@@ -17,6 +17,7 @@ struct Game: Codable {
     var stars: Int
     var categories: [Category]
     var response_code: Int
+    var has_connection: Bool
 }
 
 enum Levels: String {

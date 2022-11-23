@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Network
 
 final class GameController {
     // game holds the entire game state and is injected into every view that needs it using dependency injection
@@ -17,13 +18,15 @@ final class GameController {
         coins: 0,
         stars: 0,
         categories: [Category](),
-        response_code: 0
+        response_code: 0,
+        has_connection: false
     )
     
     init() {
         // Take care of first setup.  Get token, load the game state, and list of categories
         loadGameState()
         getToken()
+        monitorConnection()
     }
     
     // Load game state from user defaults
@@ -44,6 +47,22 @@ final class GameController {
             UserDefaults.standard.set(encoded, forKey: "game")
         }
     }
+    
+    // Monitor network connection
+    private func monitorConnection() {
+        let monitor = NWPathMonitor()
+        monitor.pathUpdateHandler = { path in
+            if path.status == .satisfied {
+                self.game.has_connection = true
+            } else {
+                self.game.has_connection = false
+            }
+            
+        }
+        let queue = DispatchQueue(label: "Monitor")
+        monitor.start(queue: queue)
+    }
+
 
     // Clear out the current level and start new level
     func loadNewLevel() {

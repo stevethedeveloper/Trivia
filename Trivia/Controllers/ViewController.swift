@@ -16,11 +16,11 @@ class ViewController: UIViewController {
     
     // Inject current game
     var gameModelController: GameController!
-
+    
     private var questions = [Question]()
     private var emojiFontSize = 0.0
     private var categories = [Category]()
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -36,7 +36,7 @@ class ViewController: UIViewController {
         // Always get a fresh view, or load new level
         refreshDisplay()
     }
-        
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
@@ -48,7 +48,7 @@ class ViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
     }
-
+    
     // Detect orientation change to force redraw
     public override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         if UIDevice.current.orientation.isLandscape || UIDevice.current.orientation.isPortrait, let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -56,7 +56,7 @@ class ViewController: UIViewController {
             collectionView.reloadData()
         }
     }
-
+        
     // Refresh view or load new level
     private func refreshDisplay() {
         if gameModelController.game.stars < 5 {
@@ -74,7 +74,7 @@ class ViewController: UIViewController {
         // In ViewHelpers
         starsLabel.attributedText = getStarsAttributedText(numberOfStars: gameModelController.game.stars, font: UIFont(name: starsLabel.font.fontName, size: 17.0)!)
     }
-
+    
     private func loadNextLevel() {
         gameModelController.loadNewLevel()
         collectionView.reloadData()
@@ -106,8 +106,16 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDelegateFlow
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // Need connection to proceed
+        if gameModelController.game.has_connection != true {
+            let ac = UIAlertController(title: "Connection not found!", message: "You need an internet connection to play Level Up Trivia. Please check your settings and try again." , preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            present(ac, animated: true)
+            return
+        }
+        
         let category = categories[indexPath.row]
-                    
+        
         DispatchQueue.main.async { [weak self] in
             if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
                 vc.gameModelController = self?.gameModelController

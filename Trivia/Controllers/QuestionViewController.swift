@@ -61,7 +61,7 @@ class QuestionViewController: UIViewController {
         // In ViewHelpers
         starsLabel.attributedText = getStarsAttributedText(numberOfStars: gameModelController.game.stars, font: UIFont(name: starsLabel.font.fontName, size: 17.0)!)
     }
-    
+        
     private func createLoaderView() {
         loaderView.text = currentCategory.image
         // add the loader view view controller
