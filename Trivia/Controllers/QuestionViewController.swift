@@ -8,7 +8,7 @@
 import UIKit
 
 class QuestionViewController: UIViewController {
-
+    
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var starsLabel: UILabel!
@@ -38,22 +38,22 @@ class QuestionViewController: UIViewController {
     
     // Loading view
     private let loaderView = RoundLoaderViewController()
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-
+        
         loadQuestions(forCategory: currentCategory.id)
-                
+        
         setUpHeaderAndFooter()
     }
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         progressLabel.text = ""
         score = gameModelController.game.score
     }
-
+    
     private func setUpHeaderAndFooter() {
         // Update score and coin labels
         scoreLabel.text = "Score: \(gameModelController.game.score.withCommas())"
@@ -70,18 +70,18 @@ class QuestionViewController: UIViewController {
         view.addSubview(loaderView.view)
         loaderView.didMove(toParent: self)
     }
-
+    
     private func newToken(reloadQuestions: Bool = true) {
         gameModelController.getToken()
         loadQuestions(forCategory: currentCategory.id)
     }
-
+    
     private func loadQuestions(forCategory category: Int) {
         // Show loading screen
         createLoaderView()
         
         var urlString: String
-
+        
         urlString = "https://opentdb.com/api.php?category=\(category)&amount=5&difficulty=\(gameModelController.getCurrentLevelDifficulty())&token=\(gameModelController.game.token)"
         
         DispatchQueue.global(qos: .userInitiated).sync { [weak self] in
@@ -105,7 +105,7 @@ class QuestionViewController: UIViewController {
             }
         }
     }
-
+    
     private func parse(json: Data) -> Bool {
         let decoder = JSONDecoder()
         
@@ -120,14 +120,14 @@ class QuestionViewController: UIViewController {
         
         return true
     }
-
+    
     private func loadQuestion() {
         // The question
         questionLabel.text = String(htmlEncodedString: "\(currentQuestion.question)")
         
         loadAnswers()
     }
-
+    
     /*
      This method sets up the answer buttons in code. There are two types of questions: mutliple choice and true/false.
      Multiple choice also gets the "buy" button to allow them to trade coins for narrowing the answers.
@@ -142,13 +142,19 @@ class QuestionViewController: UIViewController {
         // Save this to position next button. Buttons can vary in size,
         // this just saves the previous bottom anchor wherever it winds up being.
         var previousBottomAnchor = questionLabel.safeAreaLayoutGuide.bottomAnchor
-
+        
         // Cycle through answers, create buttons and position them, and add them to answers array
         for answer in answers {
             // Some initial configuration
-            var configuration = UIButton.Configuration.filled()
-            configuration.background.backgroundColor = UIColor(red: CGFloat(119/255.0), green: CGFloat(168/255.0), blue: CGFloat(179/255.0), alpha: CGFloat(1.0))
-            configuration.cornerStyle = .medium
+            var configuration = UIButton.Configuration.plain()
+            configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = .systemFont(ofSize: 22)
+                return outgoing
+            }
+            configuration.background.backgroundColor = UIColor(red: 67/255, green: 85/255, blue: 168/255, alpha: 1)
+            configuration.cornerStyle = .capsule
+            configuration.buttonSize = .large
             
             // New button for each answer
             let answerButton = UIButton(configuration: configuration, primaryAction: nil)
@@ -156,21 +162,23 @@ class QuestionViewController: UIViewController {
             answerButton.sizeToFit()
             // Config in code
             answerButton.translatesAutoresizingMaskIntoConstraints = false
+
+            answerButton.setTitleColor(.white, for: .normal)
             
             // Set and configure button title
-            answerButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
             let answerText = String(htmlEncodedString: answer)
             answerButton.setTitle(answerText, for: .normal)
+            answerButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
             answerButton.titleLabel?.numberOfLines = 0
             answerButton.titleLabel?.lineBreakMode = .byWordWrapping
             
             // Run answerTapped() when tapped
             answerButton.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
-
+            
             // Append to answers array and add to view
             view.addSubview(answerButton)
             answerButton.layer.zPosition = -1
-
+            
             answerButtons.append(answerButton)
             
             // Anchors
@@ -179,7 +187,7 @@ class QuestionViewController: UIViewController {
                 answerButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
                 answerButton.topAnchor.constraint(equalTo: previousBottomAnchor, constant: 20),
             ])
-
+            
             // Save this to position next button. Buttons can vary in size,
             // this just saves the previous bottom anchor wherever it winds up being.
             previousBottomAnchor = answerButton.safeAreaLayoutGuide.bottomAnchor
@@ -187,13 +195,20 @@ class QuestionViewController: UIViewController {
         
         // Add a button so they can buy help with question
         if currentQuestion.type == "multiple" {
-            var configuration = UIButton.Configuration.filled()
+            var configuration = UIButton.Configuration.plain()
+            configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = .systemFont(ofSize: 17)
+                return outgoing
+            }
             configuration.background.backgroundColor = UIColor(red: CGFloat(255/255.0), green: CGFloat(0/255.0), blue: CGFloat(0/255.0), alpha: CGFloat(1.0))
-            configuration.cornerStyle = .medium
+            configuration.cornerStyle = .capsule
             
+            
+            buyButton.translatesAutoresizingMaskIntoConstraints = false
             buyButton.configuration = configuration
             buyButton.sizeToFit()
-            buyButton.translatesAutoresizingMaskIntoConstraints = false
+            buyButton.setTitleColor(.white, for: .normal)
 
             buyButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
             buyButton.setTitle("🪙 Remove 2 incorrect answers for 2 coins!", for: .normal)
@@ -201,7 +216,7 @@ class QuestionViewController: UIViewController {
             buyButton.addTarget(self, action: #selector(buyHelp), for: .touchUpInside)
             view.addSubview(buyButton)
             buyButton.layer.zPosition = -1
-
+            
             // Anchors
             NSLayoutConstraint.activate([
                 buyButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
@@ -237,7 +252,7 @@ class QuestionViewController: UIViewController {
         for button in answerButtons where currentQuestion.correct_answer != button.titleLabel?.text ?? "" && numberOfAnswersToRemove > 0 {
             button.isEnabled = false
             button.configuration?.background.backgroundColor = .gray
-
+            
             numberOfAnswersToRemove -= 1
         }
         gameModelController.game.coins -= 2
@@ -266,14 +281,14 @@ class QuestionViewController: UIViewController {
                 progressLabel.text = progressText + "ⅹ "
             }
         }
-
+        
         // Calls extension to set size and color or certain characters in string.  This is necessary because the checkmark and x are different sizes and colors.  Results get assigned to progressLabel.
         let searchChar = "ⅹ"
         let progressLabelAttributedText = NSMutableAttributedString(string: progressLabel.text ?? "")
         progressLabelAttributedText.attributeRangeFor(searchString: searchChar, attributeValue: UIColor.red, attributeType: .Color, attributeSearchType: .All)
         progressLabelAttributedText.attributeRangeFor(searchString: searchChar, attributeValue: UIFont(name: progressLabel.font.fontName, size: 24.0)!, attributeType: .Size, attributeSearchType: .All)
         progressLabel.attributedText = progressLabelAttributedText
-
+        
         let ac = UIAlertController(title: result, message: correctAnswer, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: continueRound))
         present(ac, animated: true)
@@ -282,7 +297,7 @@ class QuestionViewController: UIViewController {
     private func checkAnswer(submittedAnswer: String, expectedAnswer: String) -> Bool {
         return submittedAnswer == expectedAnswer
     }
-
+    
     private func continueRound(action: UIAlertAction) {
         nextQuestion()
     }

@@ -136,7 +136,7 @@ extension ViewController: UICollectionViewDataSource {
         } else {
             cell.isUserInteractionEnabled = true
             cell.lockView.isHidden = true
-            cell.layer.borderColor = UIColor.systemPurple.cgColor
+            cell.layer.borderColor = UIColor(red: 213/255, green: 216/255, blue: 233/255, alpha: 1).cgColor
             cell.layer.backgroundColor = UIColor.white.cgColor
         }
         
