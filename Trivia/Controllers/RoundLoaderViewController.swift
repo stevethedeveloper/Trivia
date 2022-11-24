@@ -21,6 +21,7 @@ class RoundLoaderViewController: UIViewController {
         
         loadingImageLabel.text = text
         loadingImageLabel.font = loadingImageLabel.font.withSize(imageSize)
+        loadingImageLabel.adjustsFontSizeToFitWidth = true
         loadingImageLabel.translatesAutoresizingMaskIntoConstraints = false
         loadingTextLabel.contentMode = .scaleAspectFit
         loadingImageLabel.textAlignment = .center
