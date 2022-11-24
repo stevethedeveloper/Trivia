@@ -14,6 +14,7 @@ class QuestionViewController: UIViewController {
     @IBOutlet weak var starsLabel: UILabel!
     @IBOutlet weak var coinsLabel: UILabel!
     @IBOutlet weak var progressLabel: UILabel!
+    @IBOutlet var contentView: UIView!
     
     var gameModelController: GameController!
     var currentCategory: Category!
@@ -176,15 +177,15 @@ class QuestionViewController: UIViewController {
             answerButton.addTarget(self, action: #selector(answerTapped), for: .touchUpInside)
             
             // Append to answers array and add to view
-            view.addSubview(answerButton)
+            contentView.addSubview(answerButton)
             answerButton.layer.zPosition = -1
             
             answerButtons.append(answerButton)
             
             // Anchors
             NSLayoutConstraint.activate([
-                answerButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-                answerButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+                answerButton.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+                answerButton.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -10),
                 answerButton.topAnchor.constraint(equalTo: previousBottomAnchor, constant: 20),
             ])
             
@@ -214,14 +215,15 @@ class QuestionViewController: UIViewController {
             buyButton.setTitle("🪙 Remove 2 incorrect answers for 2 coins!", for: .normal)
             buyButton.titleLabel?.numberOfLines = 1
             buyButton.addTarget(self, action: #selector(buyHelp), for: .touchUpInside)
-            view.addSubview(buyButton)
+            contentView.addSubview(buyButton)
             buyButton.layer.zPosition = -1
             
             // Anchors
             NSLayoutConstraint.activate([
-                buyButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-                buyButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-                buyButton.topAnchor.constraint(equalTo: previousBottomAnchor, constant: 40)
+                buyButton.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+                buyButton.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+                buyButton.topAnchor.constraint(greaterThanOrEqualTo: previousBottomAnchor, constant: 40),
+                buyButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
             ])
         }
     }

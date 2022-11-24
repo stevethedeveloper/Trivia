@@ -14,19 +14,22 @@ class RoundLoaderViewController: UIViewController {
     override func loadView() {
         let loadingImageLabel = UILabel()
         let loadingTextLabel = UILabel()
-
+        let imageSize = 180.0
+                
         view = UIView()
         view.backgroundColor = UIColor(white: 1, alpha: 1.0)
         
         loadingImageLabel.text = text
-        loadingImageLabel.font = loadingImageLabel.font.withSize(200)
+        loadingImageLabel.font = loadingImageLabel.font.withSize(imageSize)
         loadingImageLabel.translatesAutoresizingMaskIntoConstraints = false
+        loadingTextLabel.contentMode = .scaleAspectFit
+        loadingImageLabel.textAlignment = .center
         view.addSubview(loadingImageLabel)
         
+        loadingTextLabel.translatesAutoresizingMaskIntoConstraints = false
         loadingTextLabel.text = "Loading..."
         loadingTextLabel.font = loadingTextLabel.font.withSize(30)
         loadingTextLabel.textColor = UIColor.systemGray
-        loadingTextLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(loadingTextLabel)
 
         
