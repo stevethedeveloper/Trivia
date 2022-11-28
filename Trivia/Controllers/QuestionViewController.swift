@@ -85,13 +85,13 @@ class QuestionViewController: UIViewController {
         
         urlString = "https://opentdb.com/api.php?category=\(category)&amount=5&difficulty=\(gameModelController.getCurrentLevelDifficulty())&token=\(gameModelController.game.token)"
         
-        DispatchQueue.global(qos: .userInitiated).sync { [weak self] in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             if let url = URL(string: urlString) {
                 if let data = try? Data(contentsOf: url) {
                     if self?.parse(json: data) == true {
-                        self?.nextQuestion()
                         // Hide loader view
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self?.nextQuestion()
                             self?.loaderView.view.removeFromSuperview()
                             self?.loaderView.removeFromParent()
                         }
@@ -99,7 +99,7 @@ class QuestionViewController: UIViewController {
                     } else {
                         // If no results are returned, get a new token, the newToken method will
                         // repeat the call to this function
-                        newToken()
+                        self?.newToken()
                         return
                     }
                 }
