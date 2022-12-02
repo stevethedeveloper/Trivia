@@ -72,6 +72,7 @@
 		AA8215C528FE231F00F30BCE /* Categories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Categories.swift; sourceTree = "<group>"; };
 		AA8215C728FE233000F30BCE /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		AA8215CB28FE2C1E00F30BCE /* categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = categories.json; sourceTree = "<group>"; };
+		AA82F172293AB349006AFE2D /* simulator_screenshot_31447A0C-EA8B-43E5-A544-83B43EE240B4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "simulator_screenshot_31447A0C-EA8B-43E5-A544-83B43EE240B4.png"; path = "../../../../../../var/folders/kx/ggxbty8s3xl3m_2l355gc9dr0000gn/T/simulator_screenshot_31447A0C-EA8B-43E5-A544-83B43EE240B4.png"; sourceTree = "<group>"; };
 		AA92ED8F28F634EC00E91681 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		AA92ED9128F635AC00E91681 /* GameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
 		AACD11CE29272F2E006817DD /* RoundLoaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundLoaderViewController.swift; sourceTree = "<group>"; };
@@ -109,6 +110,7 @@
 				AA66EF0428F0BCF10064C40B /* TriviaTests */,
 				AA66EF0E28F0BCF10064C40B /* TriviaUITests */,
 				AA66EEE928F0BCF00064C40B /* Products */,
+				AA82F171293AB349006AFE2D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -188,6 +190,14 @@
 				AA5D440B291F1EBF008FFF30 /* ViewHelpers.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		AA82F171293AB349006AFE2D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AA82F172293AB349006AFE2D /* simulator_screenshot_31447A0C-EA8B-43E5-A544-83B43EE240B4.png */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -512,7 +522,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MXP653QBU3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Trivia/Info.plist;
@@ -520,6 +530,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -543,7 +554,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MXP653QBU3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Trivia/Info.plist;
@@ -551,6 +562,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
