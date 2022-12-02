@@ -33,6 +33,9 @@ class ViewController: UIViewController {
         // Load categories
         categories = gameModelController.game.categories
         
+        // Allow tapping if disabled elsewhere
+        collectionView.isUserInteractionEnabled = true
+        
         // Always get a fresh view, or load new level
         refreshDisplay()
     }
@@ -96,7 +99,8 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDelegateFlow
         
         // Want a square, only need width
         let width = view.frame.size.width
-        if UIDevice.current.orientation.isLandscape {
+        let screenSize: CGRect = UIScreen.main.bounds
+        if screenSize.width > screenSize.height {
             emojiFontSize = (width / 4) * 0.22
             return CGSize(width: width * 0.18, height: width * 0.18)
         } else {
@@ -117,6 +121,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDelegateFlow
         let category = categories[indexPath.row]
         
         DispatchQueue.main.async { [weak self] in
+            collectionView.isUserInteractionEnabled = false
             if let vc = self?.storyboard?.instantiateViewController(withIdentifier: "Question") as? QuestionViewController {
                 vc.gameModelController = self?.gameModelController
                 vc.currentCategory = category
