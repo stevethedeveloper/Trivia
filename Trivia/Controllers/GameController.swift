@@ -85,7 +85,7 @@ final class GameController {
         urlString = "https://opentdb.com/api_token.php?command=request"
         
         let queue = DispatchQueue(label: "com.app.queue")
-        queue.sync {
+        queue.async {
             if let url = URL(string: urlString) {
                 if let data = try? Data(contentsOf: url) {
                     let object = try? JSONSerialization.jsonObject(
